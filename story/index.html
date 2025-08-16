@@ -15,43 +15,57 @@
     html, body { height:100%; }
     body{
       margin:0; font-family:"Merriweather", ui-serif, Georgia, serif; color:var(--text);
-      background:
-    linear-gradient(180deg, #111317 0, #111317 1000px, #000 1000px, #000 100%),
+       background:
+    linear-gradient(
+      to bottom,
+      #53504D 0px,
+      #4A4846 125px,          /* gentle ramp toward the next stop */
+      #383633 250px,
+      #2E2C2B 375px,          /* mid tint to keep it smooth */
+      #1C1B1A 500px,
+      #121211 750px,          /* slow fade toward black */
+      #000000 1000px,
+      #000000 100%
+    ),
 
-    /* Layer 2: accent radial (no repeat, fixed size, positioned) */
+    /* Layer 2–3: the moody radials (single instances, no tiling) */
     radial-gradient(900px 700px at 20% -10%, #1a1d24 0%, transparent 60%),
-
-    /* Layer 3: second accent radial (no repeat) */
     radial-gradient(1000px 800px at 120% -30%, #19121e 0%, transparent 60%),
 
-    /* Fallback base color */
+    /* Fallback base */
     #000;
 
-  /* Prevent any tiling that can cause “choppy” look on tall pages */
+  /* Prevent any tiling on tall pages */
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
 
-  /* Explicit sizes for the radials so they don’t scale/retile oddly */
+  /* Fixed sizes for the radials so they don’t reflow/retile */
   background-size:
-    100% 100%,        /* linear gradient covers page */
-    900px 700px,      /* first radial */
-    1000px 800px,     /* second radial */
+    100% 100%,   /* the linear gradient covers the page */
+    900px 700px,
+    1000px 800px,
     auto;
 
-  /* Positions match your original vibe; tweak if you like */
   background-position:
     top left,
     20% -10%,
     120% -30%,
     center;
 
-  /* Keep content off the bottom chrome/safe area */
+  /* Keep content off the device bottom “chin” */
   padding-bottom: calc(24px + env(safe-area-inset-bottom));
 }
 @media (max-width: 880px){
-  /* On small screens, make the background even calmer */
   body{
     background:
-      linear-gradient(180deg, #111317 0, #111317 900px, #000 900px, #000 100%),
+      linear-gradient(
+        to bottom,
+        #53504D 0px,
+        #454340 120px,
+        #30302E 240px,
+        #1C1B1A 360px,
+        #000 720px,
+        #000 100%
+      ),
       #000;
     background-repeat: no-repeat, no-repeat;
     background-size: 100% 100%, auto;
