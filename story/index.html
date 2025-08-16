@@ -80,6 +80,12 @@
       background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%);
       border:1px solid var(--border); border-radius:16px; padding:18px;
     }
+
+    /* NEW: controls row above the chapter title */
+    .top-controls{
+      display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-bottom:10px;
+    }
+
     .chapter-header{ display:flex; align-items:baseline; gap:10px; margin:6px 0 10px; }
     .chapter-header h2{ margin:0; font: 700 26px/1 "Cinzel", serif; letter-spacing:.4px; }
     .chapter-header span{ color:var(--muted); font-size:13px; }
@@ -104,22 +110,57 @@
     .meta a{ color:var(--accent-2); text-decoration:none; font-size:13px; }
     .meta a:hover{ text-decoration:underline; }
 
-    /* Gallery */
-    .toolbar{
-      display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:10px;
-    }
+    /* Buttons */
     .btn{
       padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0b0e14; color:var(--text); cursor:pointer;
     }
+    /* NEW: “inverted” style for All-Chapter Gallery button */
+    .btn-invert{
+      background: var(--text);
+      color: #0c0f15;
+      border-color: var(--text);
+      font-weight: 700;
+    }
+    .btn-invert:hover{
+      background: transparent;
+      color: var(--text);
+      border-color: var(--text);
+      box-shadow: 0 0 0 3px rgba(236,239,244,.12);
+    }
+
+    /* Per-chapter gallery (existing) */
     .gallery{ display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:14px; }
     .card{ background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in; position:relative; }
     .card img{ display:block; width:100%; height:170px; object-fit:cover; filter:saturate(1.02) contrast(1.05); transition:.2s transform; }
     .card:hover img{ transform: scale(1.02); }
     .cap{ font-size:12px; color:var(--muted); padding:8px 10px; display:block; }
 
-    /* Gallery-only mode */
+    /* Gallery-only mode (existing) */
     .gallery-only .chapter-text, .gallery-only .chapter-header, .gallery-only .meta{ display:none; }
     .gallery-only .gallery{ margin-top:0; }
+
+    /* NEW: All-chapter gallery layout */
+    .all-gallery{ display:none; }
+    .all-gallery.show{ display:block; }
+    .all-gallery h3{
+      font:700 20px/1 "Cinzel", serif;
+      margin: 18px 0 10px;
+      letter-spacing:.3px;
+      border-bottom:1px solid var(--border);
+      padding-bottom:6px;
+    }
+    .all-gallery .chapter-grid{
+      display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap:12px; margin-bottom:18px;
+    }
+    .all-gallery .thumb{
+      background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in;
+    }
+    .all-gallery .thumb img{
+      display:block; width:100%; height:170px; object-fit:cover;
+      transition: transform .2s; filter:saturate(1.02) contrast(1.05);
+    }
+    .all-gallery .thumb:hover img{ transform: scale(1.02); }
 
     /* Lightbox */
     .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:50; }
@@ -139,7 +180,7 @@
       .shell{ grid-template-columns: 1fr; }
       .sidebar{ position:static; height:auto; }
       .chapters{ max-height:40vh; }
-      /* Mobile: show story text by default; gallery behind a button */
+      /* Mobile: the per-chapter gallery stays hidden until toggled */
       .gallery{ display:none; }
       .gallery.show{ display:grid; }
     }
@@ -153,10 +194,6 @@
       <h1 class="brand-title">Curse of Strahd — Story So Far</h1>
       <nav class="top-links">
         <a href="/">Home</a>
-        <a href="/#profile">Profile</a>
-        <a href="/#resume">Resume</a>
-        <a href="/#hobbies">Hobbies</a>
-        <a href="/#other">Other</a>
       </nav>
     </header>
 
@@ -178,6 +215,12 @@
 
     <!-- Main content -->
     <main class="content" role="main" id="mainContent">
+
+      <!-- NEW: a clearly different button above the chapter title -->
+      <div class="top-controls">
+        <button id="allGalleryBtn" class="btn btn-invert" aria-pressed="false">All-Chapter Gallery</button>
+      </div>
+
       <div class="chapter-header">
         <h2 id="chapterTitle">Chapter Title</h2>
         <span id="chapterMeta"></span>
@@ -193,6 +236,9 @@
       </div>
 
       <section class="gallery" id="gallery" aria-label="Image gallery"></section>
+
+      <!-- NEW: all-chapter gallery container -->
+      <section id="allGallery" class="all-gallery" aria-label="All chapters image gallery"></section>
     </main>
   </div>
 
@@ -216,12 +262,23 @@
       chapters: [
         {
           id: "intro",
-          title: "Introduction & Characters",
+          title: "Introduction to Barovia",
           date: "2025-01-01",
           text: `Introduce the vibe of Barovia and list your characters here.\n\nUse **bold** for emphasis, *italics* for flavor.\n\nYou can replace all placeholder text later.`,
           album: [ { label: "Series Album", href: "https://imgur.com/a/your-album" } ],
           images: [
-            { src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop", alt: "Bleak landscape", cap: "The Mists Gather" }
+            { src: "images/hoberm.webp", alt: "Hoberm", cap: "Our loyal halfling druid" },
+            { src: "images/gadwick.webp", alt: "Gadwick", cap: "Court mage of Eldamere" }
+          ]
+        },
+        {
+          id: "characters",
+          title: "Characters",
+          date: "2025-01-01",
+          text: `Put your party roster here.`,
+          album: [],
+          images: [
+            { src: "images/party-shot.webp", alt: "Party", cap: "The company gathered" }
           ]
         },
         {
@@ -231,8 +288,8 @@
           text: `Fog like wet wool. A letter that shouldn't exist...`,
           album: [],
           images: [
-            { src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1600&auto=format&fit=crop", alt: "Misty forest road", cap: "Road to Barovia" },
-            { src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop", alt: "Old letter", cap: "The letter" }
+            { src: "images/arrival.webp", alt: "Misty forest road", cap: "Road to Barovia" },
+            { src: "images/letter.webp",  alt: "Old letter",        cap: "The letter" }
           ]
         },
         {
@@ -240,10 +297,10 @@
           title: "The Village and the Doll",
           date: "2025-02-02",
           text: `Hoberm tried to cheer a grieving mother with an opossum...`,
-          album: [ { label: "Dropbox folder", href: "https://www.dropbox.com/scl/fo/your-folder?rlkey=xyz" } ],
+          album: [],
           images: [
-            { src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop", alt: "Candlelit room", cap: "Grief and resolve" },
-            { src: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop", alt: "Porcelain doll", cap: "The doll" }
+            { src: "images/village-1.webp", alt: "Candlelit room", cap: "Grief and resolve" },
+            { src: "images/doll.webp",      alt: "Porcelain doll", cap: "The doll" }
           ]
         }
         // Add more chapters freely — pagination will handle the list
@@ -269,6 +326,8 @@
     const mainContent  = document.getElementById('mainContent');
     const toggleGallery = document.getElementById('toggleGallery');
     const toggleMobileGallery = document.getElementById('toggleMobileGallery');
+    const allGalleryBtn = document.getElementById('allGalleryBtn');
+    const allGallerySec = document.getElementById('allGallery');
 
     let currentPage = 0;
 
@@ -283,7 +342,11 @@
         btn.textContent = c.title;
         btn.setAttribute('role','tab');
         btn.setAttribute('aria-controls', `panel-${c.id}`);
-        btn.addEventListener('click', () => loadChapter(start + i));
+        btn.addEventListener('click', () => {
+          // ensure we exit all-gallery when a chapter is chosen
+          showAllGallery(false);
+          loadChapter(start + i);
+        });
         li.appendChild(btn); chapterList.appendChild(li);
       });
 
@@ -319,7 +382,7 @@
         albumLinks.appendChild(link);
       });
 
-      // Thumbs
+      // Thumbs for this chapter
       gallery.innerHTML = '';
       (c.images||[]).forEach((img, i) => {
         const card = document.createElement('figure'); card.className = 'card';
@@ -350,20 +413,82 @@
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
     }
 
-    // Gallery Mode toggle
+    // Gallery Mode toggle (per-chapter)
     toggleGallery.addEventListener('click', () => {
+      // leave all-gallery mode if active
+      showAllGallery(false);
+
       const on = !mainContent.classList.contains('gallery-only');
       mainContent.classList.toggle('gallery-only', on);
       toggleGallery.setAttribute('aria-pressed', String(on));
       toggleGallery.textContent = on ? 'Story Mode' : 'Gallery Mode';
     });
 
-    // Mobile: show/hide gallery separately
+    // Mobile: show/hide this chapter's gallery
     toggleMobileGallery.addEventListener('click', () => {
       const shown = gallery.classList.toggle('show');
       toggleMobileGallery.setAttribute('aria-pressed', String(shown));
       toggleMobileGallery.textContent = shown ? 'Hide Gallery (Mobile)' : 'Show Gallery (Mobile)';
     });
+
+    // NEW: Build the all-chapter gallery section
+    function buildAllGallery(){
+      allGallerySec.innerHTML = ''; // reset
+
+      STORY.chapters.forEach((chapter, chapIndex) => {
+        if(!chapter.images || chapter.images.length === 0) return;
+
+        const h = document.createElement('h3');
+        h.textContent = chapter.title;
+        allGallerySec.appendChild(h);
+
+        const grid = document.createElement('div');
+        grid.className = 'chapter-grid';
+
+        chapter.images.forEach((img, i) => {
+          const fig = document.createElement('figure');
+          fig.className = 'thumb';
+          const im = document.createElement('img');
+          im.loading = 'lazy';
+          im.src = img.src;
+          im.alt = img.alt || '';
+          im.addEventListener('click', () => openLightbox(chapter.images, i));
+          fig.appendChild(im);
+          grid.appendChild(fig);
+        });
+
+        allGallerySec.appendChild(grid);
+      });
+    }
+
+    // NEW: Toggle All-Chapter Gallery on/off
+    function showAllGallery(on){
+      const pressed = allGalleryBtn.getAttribute('aria-pressed') === 'true';
+      const wantOn = (typeof on === 'boolean') ? on : !pressed;
+
+      allGalleryBtn.setAttribute('aria-pressed', String(wantOn));
+      allGalleryBtn.textContent = wantOn ? 'Back to Story' : 'All-Chapter Gallery';
+
+      // hide story UI when all-gallery is shown
+      const storyBits = [document.querySelector('.chapter-header'), chapterText, albumLinks, document.querySelector('.toolbar'), gallery];
+      storyBits.forEach(el => { if(el) el.style.display = wantOn ? 'none' : ''; });
+
+      // also turn off per-chapter Gallery Mode when entering all-gallery
+      if(wantOn && mainContent.classList.contains('gallery-only')){
+        mainContent.classList.remove('gallery-only');
+        toggleGallery.setAttribute('aria-pressed', 'false');
+        toggleGallery.textContent = 'Gallery Mode';
+      }
+
+      if(wantOn){
+        buildAllGallery();
+        allGallerySec.classList.add('show');
+      }else{
+        allGallerySec.classList.remove('show');
+      }
+    }
+
+    allGalleryBtn.addEventListener('click', () => showAllGallery());
 
     // Lightbox
     const lb = document.getElementById('lightbox');
@@ -403,7 +528,7 @@
         renderChapterList();
         loadChapter(idx);
       } else {
-        loadChapter(0); // default to Introduction & Characters
+        loadChapter(0); // default to first chapter
       }
     }
     init();
