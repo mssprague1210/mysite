@@ -5,42 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Curse of Strahd — Story So Far</title>
 
-  <!-- Google Fonts: gothic-but-readable -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg0: #0a0a0a;
-      --bg1: #111317;   /* deep slate grey */
-      --panel: #0f1218;
-      --muted: #a7adba;
-      --text: #eceff4;
-      --accent: #b84a4a;      /* wine red */
-      --accent-2: #7cc4ff;    /* cool blue for links */
-      --card: #0c0f15;
-      --ring: rgba(184,74,74,.35);
-      --border: #2a2e37;
+      --bg0:#0a0a0a; --bg1:#111317; --panel:#0f1218; --muted:#a7adba; --text:#eceff4;
+      --accent:#b84a4a; --accent-2:#7cc4ff; --card:#0c0f15; --ring:rgba(184,74,74,.35); --border:#2a2e37;
     }
-
-    /* Spooky gradient backdrop */
-    html, body { height: 100%; }
+    html, body { height:100%; }
     body{
-      margin:0;
-      font-family: "Merriweather", ui-serif, Georgia, serif;
-      color: var(--text);
+      margin:0; font-family:"Merriweather", ui-serif, Georgia, serif; color:var(--text);
       background:
         radial-gradient(900px 700px at 20% -10%, #1a1d24 0%, transparent 60%),
         radial-gradient(1000px 800px at 120% -30%, #19121e 0%, transparent 60%),
         linear-gradient(180deg, var(--bg1), var(--bg0));
+      /* keep content off the bottom chrome/safe area */
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
     }
 
-    /* Layout */
-    .shell{ display:grid; grid-template-columns: 300px 1fr; gap:18px; max-width:1200px; margin:24px auto; padding:0 16px; }
+    .shell{ display:grid; grid-template-columns:300px 1fr; gap:18px; max-width:1200px; margin:24px auto; padding:0 16px; }
     header.topbar{
-      grid-column: 1 / -1;
-      display:flex; justify-content:space-between; align-items:center;
+      grid-column:1 / -1; display:flex; justify-content:space-between; align-items:center;
       padding:12px 16px; border:1px solid var(--border); border-radius:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+      margin-bottom:8px;
     }
     .brand-title{ font-family:"Cinzel", serif; letter-spacing:.5px; margin:0; font-size:22px; }
     .top-links a{ color:var(--text); text-decoration:none; margin-left:14px; }
@@ -48,119 +36,91 @@
 
     .sidebar{
       position:sticky; top:16px; height:calc(100dvh - 32px);
-      background: linear-gradient(180deg, #0f1218, #0b0e14);
+      background:linear-gradient(180deg, #0f1218, #0b0e14);
       border:1px solid var(--border); border-radius:14px; overflow:hidden;
+      /* keep sidebar off device bottom edge */
+      margin-bottom:16px;
     }
-
-    .brand{ padding:16px 16px 8px; border-bottom:1px solid var(--border);
-      background: linear-gradient(180deg, rgba(184,74,74,.08), transparent 60%); }
-    .brand h2{ font: 700 16px/1 "Cinzel", serif; margin:0 0 6px; }
+    .brand{ padding:12px 12px 10px; border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(184,74,74,.08), transparent 60%); }
+    .brand h2{ font:700 16px/1 "Cinzel", serif; margin:0 0 6px; }
     .brand p{ margin:0; color:var(--muted); font-size:12px; }
 
-    .chap-wrap{ display:flex; flex-direction:column; height:calc(100% - 72px); }
+    /* Moved here: All-Chapter Gallery button (inverted) */
+    .brand .btn-invert{
+      width:100%; margin-top:8px;
+      padding:10px 12px; border-radius:10px; border:1px solid var(--text);
+      background:var(--text); color:#0c0f15; font-weight:700; cursor:pointer;
+    }
+    .brand .btn-invert:hover{
+      background:transparent; color:var(--text);
+      box-shadow:0 0 0 3px rgba(236,239,244,.12);
+    }
+
+    .chap-wrap{ display:flex; flex-direction:column; height:calc(100% - 88px); }
     .chapters{ list-style:none; margin:0; padding:10px; overflow:auto; }
     .chapters li{ margin:6px 0; }
     .chapters button{
       width:100%; text-align:left; padding:10px 12px; background:transparent; color:var(--text);
-      border:1px solid var(--border); border-radius:10px; cursor:pointer; transition:.2s;
-      font-family:"Merriweather", serif;
+      border:1px solid var(--border); border-radius:10px; cursor:pointer; transition:.2s; font-family:"Merriweather", serif;
     }
-    .chapters button:hover,
-    .chapters button[aria-current="true"]{
-      background: rgba(184,74,74,.10); border-color: rgba(184,74,74,.4);
-      box-shadow: 0 0 0 3px var(--ring);
+    .chapters button:hover, .chapters button[aria-current="true"]{
+      background:rgba(184,74,74,.10); border-color:rgba(184,74,74,.4); box-shadow:0 0 0 3px var(--ring);
     }
-    .pager{ display:flex; gap:8px; justify-content:space-between; padding:8px 10px 12px; border-top:1px solid var(--border); }
-    .pager button{
-      padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0b0e14; color:var(--text); cursor:pointer;
+    .pager{
+      display:flex; gap:8px; justify-content:space-between; padding:8px 10px 12px;
+      border-top:1px solid var(--border); background:rgba(0,0,0,.15);
     }
+    .btn{ padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0b0e14; color:var(--text); cursor:pointer; }
     .pager button:disabled{ opacity:.4; cursor:not-allowed; }
 
     .content{
-      background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%);
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%);
       border:1px solid var(--border); border-radius:16px; padding:18px;
+      margin-bottom:24px; /* keep content off bottom */
     }
-
-    /* NEW: controls row above the chapter title */
-    .top-controls{
-      display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-bottom:10px;
-    }
-
     .chapter-header{ display:flex; align-items:baseline; gap:10px; margin:6px 0 10px; }
-    .chapter-header h2{ margin:0; font: 700 26px/1 "Cinzel", serif; letter-spacing:.4px; }
+    .chapter-header h2{ margin:0; font:700 26px/1 "Cinzel", serif; letter-spacing:.4px; }
     .chapter-header span{ color:var(--muted); font-size:13px; }
 
-    /* Journal feel for the text block */
     .chapter-text{
       color:#e6e9f0; line-height:1.75; font-size:17px; white-space:pre-wrap;
       background:
         radial-gradient(1200px 500px at 0% 0%, rgba(184,74,74,.06) 0%, transparent 50%),
         linear-gradient(180deg, rgba(255,255,255,.02), transparent 70%);
-      border: 1px solid #3a3f49;
-      border-radius: 14px;
-      padding: 16px 18px;
-      box-shadow:
-        inset 0 0 0 2px rgba(255,255,255,.02),
-        inset 0 12px 24px rgba(0,0,0,.35);
+      border:1px solid #3a3f49; border-radius:14px; padding:16px 18px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.02), inset 0 12px 24px rgba(0,0,0,.35);
     }
-    .chapter-text p{ margin: 0 0 1rem; }
+    .chapter-text p{ margin:0 0 1rem; }
 
-    /* Meta links under text */
-    .meta{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin: 12px 0 0; }
+    .meta{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0 0; }
     .meta a{ color:var(--accent-2); text-decoration:none; font-size:13px; }
     .meta a:hover{ text-decoration:underline; }
 
-    /* Buttons */
-    .btn{
-      padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0b0e14; color:var(--text); cursor:pointer;
-    }
-    /* NEW: “inverted” style for All-Chapter Gallery button */
-    .btn-invert{
-      background: var(--text);
-      color: #0c0f15;
-      border-color: var(--text);
-      font-weight: 700;
-    }
-    .btn-invert:hover{
-      background: transparent;
-      color: var(--text);
-      border-color: var(--text);
-      box-shadow: 0 0 0 3px rgba(236,239,244,.12);
-    }
-
-    /* Per-chapter gallery (existing) */
-    .gallery{ display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:14px; }
-    .card{ background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in; position:relative; }
+    .toolbar{ display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:10px; }
+    .gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:14px; }
+    .card{ background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in; position:relative; }
     .card img{ display:block; width:100%; height:170px; object-fit:cover; filter:saturate(1.02) contrast(1.05); transition:.2s transform; }
-    .card:hover img{ transform: scale(1.02); }
+    .card:hover img{ transform:scale(1.02); }
     .cap{ font-size:12px; color:var(--muted); padding:8px 10px; display:block; }
 
-    /* Gallery-only mode (existing) */
     .gallery-only .chapter-text, .gallery-only .chapter-header, .gallery-only .meta{ display:none; }
     .gallery-only .gallery{ margin-top:0; }
 
-    /* NEW: All-chapter gallery layout */
+    /* All-chapter gallery */
     .all-gallery{ display:none; }
     .all-gallery.show{ display:block; }
     .all-gallery h3{
-      font:700 20px/1 "Cinzel", serif;
-      margin: 18px 0 10px;
-      letter-spacing:.3px;
-      border-bottom:1px solid var(--border);
-      padding-bottom:6px;
+      font:700 20px/1 "Cinzel", serif; margin:18px 0 10px; letter-spacing:.3px;
+      border-bottom:1px solid var(--border); padding-bottom:6px;
     }
     .all-gallery .chapter-grid{
-      display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
       gap:12px; margin-bottom:18px;
     }
-    .all-gallery .thumb{
-      background: var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in;
-    }
-    .all-gallery .thumb img{
-      display:block; width:100%; height:170px; object-fit:cover;
-      transition: transform .2s; filter:saturate(1.02) contrast(1.05);
-    }
-    .all-gallery .thumb:hover img{ transform: scale(1.02); }
+    .all-gallery .thumb{ background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in; }
+    .all-gallery .thumb img{ display:block; width:100%; height:170px; object-fit:cover; transition:transform .2s; filter:saturate(1.02) contrast(1.05); }
+    .all-gallery .thumb:hover img{ transform:scale(1.02); }
 
     /* Lightbox */
     .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:50; }
@@ -169,39 +129,34 @@
     .lb-cap{ color:#dbe2ee; font-size:14px; margin-top:10px; text-align:center; max-width:92vw; }
     .lb-close, .lb-prev, .lb-next{
       position:fixed; top:12px; background:#0b0e14; border:1px solid var(--border); color:#fff;
-      backdrop-filter: blur(6px); padding:8px 12px; border-radius:10px; cursor:pointer;
+      backdrop-filter:blur(6px); padding:8px 12px; border-radius:10px; cursor:pointer;
     }
     .lb-close{ right:12px; }
     .lb-prev, .lb-next{ top:50%; transform:translateY(-50%); }
     .lb-prev{ left:12px; } .lb-next{ right:12px; }
 
-    /* Mobile */
-    @media (max-width: 880px){
-      .shell{ grid-template-columns: 1fr; }
+    @media (max-width:880px){
+      .shell{ grid-template-columns:1fr; }
       .sidebar{ position:static; height:auto; }
       .chapters{ max-height:40vh; }
-      /* Mobile: the per-chapter gallery stays hidden until toggled */
-      .gallery{ display:none; }
-      .gallery.show{ display:grid; }
+      .gallery{ display:none; } .gallery.show{ display:grid; }
     }
   </style>
 </head>
 <body>
   <div class="shell">
-
-    <!-- Top bar -->
     <header class="topbar">
       <h1 class="brand-title">Curse of Strahd — Story So Far</h1>
-      <nav class="top-links">
-        <a href="/">Home</a>
-      </nav>
+      <nav class="top-links"><a href="/">Home</a></nav>
     </header>
 
     <!-- Sidebar -->
     <aside class="sidebar" role="complementary">
       <div class="brand">
         <h2>Chapters</h2>
-        <p>Tap to open an entry • 10 per page</p>
+        <p>Tap to open an entry • Paginated</p>
+        <!-- Moved here -->
+        <button id="allGalleryBtn" class="btn-invert" aria-pressed="false">All-Chapter Gallery</button>
       </div>
 
       <div class="chap-wrap">
@@ -215,19 +170,12 @@
 
     <!-- Main content -->
     <main class="content" role="main" id="mainContent">
-
-      <!-- NEW: a clearly different button above the chapter title -->
-      <div class="top-controls">
-        <button id="allGalleryBtn" class="btn btn-invert" aria-pressed="false">All-Chapter Gallery</button>
-      </div>
-
       <div class="chapter-header">
         <h2 id="chapterTitle">Chapter Title</h2>
         <span id="chapterMeta"></span>
       </div>
 
       <div id="chapterText" class="chapter-text">Select a chapter on the left to begin.</div>
-
       <div class="meta" id="albumLinks" aria-live="polite"></div>
 
       <div class="toolbar">
@@ -236,8 +184,6 @@
       </div>
 
       <section class="gallery" id="gallery" aria-label="Image gallery"></section>
-
-      <!-- NEW: all-chapter gallery container -->
       <section id="allGallery" class="all-gallery" aria-label="All chapters image gallery"></section>
     </main>
   </div>
@@ -254,67 +200,30 @@
   </div>
 
   <script>
-    /* =============================
-       1) YOUR CONTENT
-       ============================= */
+    /* ---------- CONTENT ---------- */
     const STORY = {
       title: "Curse of Strahd — The Story So Far",
       chapters: [
-        {
-          id: "intro",
-          title: "Introduction to Barovia",
-          date: "2025-01-01",
-          text: `Introduce the vibe of Barovia and list your characters here.\n\nUse **bold** for emphasis, *italics* for flavor.\n\nYou can replace all placeholder text later.`,
-          album: [ { label: "Series Album", href: "https://imgur.com/a/your-album" } ],
-          images: [
-            { src: "images/hoberm.webp", alt: "Hoberm", cap: "Our loyal halfling druid" },
-            { src: "images/gadwick.webp", alt: "Gadwick", cap: "Court mage of Eldamere" }
-          ]
-        },
-        {
-          id: "characters",
-          title: "Characters",
-          date: "2025-01-01",
-          text: `Put your party roster here.`,
-          album: [],
-          images: [
-            { src: "images/party-shot.webp", alt: "Party", cap: "The company gathered" }
-          ]
-        },
-        {
-          id: "arrival",
-          title: "Arrival in Barovia",
-          date: "2025-01-17",
-          text: `Fog like wet wool. A letter that shouldn't exist...`,
-          album: [],
-          images: [
-            { src: "images/arrival.webp", alt: "Misty forest road", cap: "Road to Barovia" },
-            { src: "images/letter.webp",  alt: "Old letter",        cap: "The letter" }
-          ]
-        },
-        {
-          id: "village",
-          title: "The Village and the Doll",
-          date: "2025-02-02",
-          text: `Hoberm tried to cheer a grieving mother with an opossum...`,
-          album: [],
-          images: [
-            { src: "images/village-1.webp", alt: "Candlelit room", cap: "Grief and resolve" },
-            { src: "images/doll.webp",      alt: "Porcelain doll", cap: "The doll" }
-          ]
-        }
-        // Add more chapters freely — pagination will handle the list
+        { id:"intro", title:"Introduction & Characters", date:"2025-01-01",
+          text:`Introduce the vibe of Barovia and list your characters here.`,
+          images:[ {src:"images/hoberm.webp",alt:"Hoberm",cap:"Halfling druid"}, {src:"images/gadwick.webp",alt:"Gadwick",cap:"Court mage"} ] },
+        { id:"arrival", title:"Arrival in Barovia", date:"2025-01-17",
+          text:`Fog like wet wool. A letter that shouldn't exist...`,
+          images:[ {src:"images/arrival.webp",alt:"Road to Barovia",cap:"The road"}, {src:"images/letter.webp",alt:"Letter",cap:"The letter"} ] },
+        { id:"village", title:"The Village and the Doll", date:"2025-02-02",
+          text:`Hoberm tried to cheer a grieving mother with an opossum...`,
+          images:[ {src:"images/village-1.webp",alt:"Candlelit room",cap:"Resolve"}, {src:"images/doll.webp",alt:"The doll",cap:"Clue"} ] }
+        // add more chapters freely
       ]
     };
 
-    /* =============================
-       2) SETTINGS
-       ============================= */
-    const CHAPTERS_PER_PAGE = 10;
+    /* ---------- SETTINGS (responsive pagination) ---------- */
+    const MOBILE_MEDIA = window.matchMedia('(max-width: 880px)');
+    const MOBILE_PER_PAGE = 5;
+    const DESKTOP_PER_PAGE = 10;
+    let CHAPTERS_PER_PAGE = MOBILE_MEDIA.matches ? MOBILE_PER_PAGE : DESKTOP_PER_PAGE;
 
-    /* =============================
-       3) APP CODE
-       ============================= */
+    /* ---------- STATE / DOM ---------- */
     const chapterList = document.getElementById('chapterList');
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
@@ -342,11 +251,7 @@
         btn.textContent = c.title;
         btn.setAttribute('role','tab');
         btn.setAttribute('aria-controls', `panel-${c.id}`);
-        btn.addEventListener('click', () => {
-          // ensure we exit all-gallery when a chapter is chosen
-          showAllGallery(false);
-          loadChapter(start + i);
-        });
+        btn.addEventListener('click', () => { showAllGallery(false); loadChapter(start + i); });
         li.appendChild(btn); chapterList.appendChild(li);
       });
 
@@ -360,10 +265,20 @@
       if(currentPage < maxPage){ currentPage++; renderChapterList(); }
     });
 
+    /* Recalculate per-page on viewport change, keep the current chapter visible */
+    MOBILE_MEDIA.addEventListener('change', () => {
+      const oldPerPage = CHAPTERS_PER_PAGE;
+      CHAPTERS_PER_PAGE = MOBILE_MEDIA.matches ? MOBILE_PER_PAGE : DESKTOP_PER_PAGE;
+      const activeId = location.hash.replace('#','');
+      const idx = STORY.chapters.findIndex(c => c.id === activeId);
+      currentPage = idx >= 0 ? Math.floor(idx / CHAPTERS_PER_PAGE) : 0;
+      renderChapterList();
+      if(idx >= 0) loadChapter(idx);
+    });
+
     function loadChapter(index){
       const c = STORY.chapters[index];
 
-      // Set current flag in list
       const start = currentPage * CHAPTERS_PER_PAGE;
       [...chapterList.querySelectorAll('button')].forEach((b,i)=>{
         b.setAttribute('aria-current', start + i === index ? 'true' : 'false');
@@ -373,16 +288,8 @@
       chapterMeta.textContent = c.date ? new Date(c.date).toLocaleDateString() : '';
       chapterText.innerHTML = renderMarkdown(c.text || '');
 
-      // Album links
       albumLinks.innerHTML = '';
-      (c.album||[]).forEach(a => {
-        const link = document.createElement('a');
-        link.href = a.href; link.target = '_blank'; link.rel = 'noopener';
-        link.textContent = a.label;
-        albumLinks.appendChild(link);
-      });
 
-      // Thumbs for this chapter
       gallery.innerHTML = '';
       (c.images||[]).forEach((img, i) => {
         const card = document.createElement('figure'); card.className = 'card';
@@ -393,11 +300,9 @@
         card.appendChild(im); card.appendChild(cap); gallery.appendChild(card);
       });
 
-      // Update URL hash for sharing specific chapter
       history.replaceState(null, '', `#${c.id}`);
     }
 
-    // Markdown-lite
     function renderMarkdown(md){
       return md
         .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -407,97 +312,75 @@
         .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
         .replace(/\*([^*]+)\*/g,'<em>$1</em>')
         .replace(/`([^`]+)`/g,'<code style="background:#0b1120;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.08)">$1</code>')
-        .replace(/\n\n/g,'</p><p>')
-        .replace(/^/,'<p>')
-        .concat('</p>')
+        .replace(/\n\n/g,'</p><p>').replace(/^/,'<p>').concat('</p>')
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
     }
 
-    // Gallery Mode toggle (per-chapter)
+    /* Per-chapter gallery mode */
     toggleGallery.addEventListener('click', () => {
-      // leave all-gallery mode if active
       showAllGallery(false);
-
       const on = !mainContent.classList.contains('gallery-only');
       mainContent.classList.toggle('gallery-only', on);
       toggleGallery.setAttribute('aria-pressed', String(on));
       toggleGallery.textContent = on ? 'Story Mode' : 'Gallery Mode';
     });
 
-    // Mobile: show/hide this chapter's gallery
+    /* Mobile: show/hide this chapter's gallery */
     toggleMobileGallery.addEventListener('click', () => {
       const shown = gallery.classList.toggle('show');
       toggleMobileGallery.setAttribute('aria-pressed', String(shown));
       toggleMobileGallery.textContent = shown ? 'Hide Gallery (Mobile)' : 'Show Gallery (Mobile)';
     });
 
-    // NEW: Build the all-chapter gallery section
+    /* All-chapter gallery */
     function buildAllGallery(){
-      allGallerySec.innerHTML = ''; // reset
-
-      STORY.chapters.forEach((chapter, chapIndex) => {
+      allGallerySec.innerHTML = '';
+      STORY.chapters.forEach((chapter) => {
         if(!chapter.images || chapter.images.length === 0) return;
-
-        const h = document.createElement('h3');
-        h.textContent = chapter.title;
-        allGallerySec.appendChild(h);
-
-        const grid = document.createElement('div');
-        grid.className = 'chapter-grid';
-
+        const h = document.createElement('h3'); h.textContent = chapter.title; allGallerySec.appendChild(h);
+        const grid = document.createElement('div'); grid.className = 'chapter-grid';
         chapter.images.forEach((img, i) => {
-          const fig = document.createElement('figure');
-          fig.className = 'thumb';
-          const im = document.createElement('img');
-          im.loading = 'lazy';
-          im.src = img.src;
-          im.alt = img.alt || '';
+          const fig = document.createElement('figure'); fig.className = 'thumb';
+          const im = document.createElement('img'); im.loading = 'lazy'; im.src = img.src; im.alt = img.alt || '';
           im.addEventListener('click', () => openLightbox(chapter.images, i));
-          fig.appendChild(im);
-          grid.appendChild(fig);
+          fig.appendChild(im); grid.appendChild(fig);
         });
-
         allGallerySec.appendChild(grid);
       });
     }
 
-    // NEW: Toggle All-Chapter Gallery on/off
     function showAllGallery(on){
       const pressed = allGalleryBtn.getAttribute('aria-pressed') === 'true';
       const wantOn = (typeof on === 'boolean') ? on : !pressed;
-
       allGalleryBtn.setAttribute('aria-pressed', String(wantOn));
       allGalleryBtn.textContent = wantOn ? 'Back to Story' : 'All-Chapter Gallery';
 
-      // hide story UI when all-gallery is shown
       const storyBits = [document.querySelector('.chapter-header'), chapterText, albumLinks, document.querySelector('.toolbar'), gallery];
       storyBits.forEach(el => { if(el) el.style.display = wantOn ? 'none' : ''; });
 
-      // also turn off per-chapter Gallery Mode when entering all-gallery
-      if(wantOn && mainContent.classList.contains('gallery-only')){
-        mainContent.classList.remove('gallery-only');
-        toggleGallery.setAttribute('aria-pressed', 'false');
-        toggleGallery.textContent = 'Gallery Mode';
-      }
-
       if(wantOn){
+        if(mainContent.classList.contains('gallery-only')){
+          mainContent.classList.remove('gallery-only');
+          toggleGallery.setAttribute('aria-pressed','false');
+          toggleGallery.textContent = 'Gallery Mode';
+        }
         buildAllGallery();
         allGallerySec.classList.add('show');
+        // ensure you’re at the top of content on mobile
+        mainContent.scrollIntoView({behavior:'smooth', block:'start'});
       }else{
         allGallerySec.classList.remove('show');
       }
     }
-
     allGalleryBtn.addEventListener('click', () => showAllGallery());
 
-    // Lightbox
+    /* Lightbox */
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
     const lbCap = document.getElementById('lbCap');
     const lbClose = document.getElementById('lbClose');
     const lbPrev = document.getElementById('lbPrev');
     const lbNext = document.getElementById('lbNext');
-
     let lbSet = []; let lbIndex = 0;
     function openLightbox(set, i){ lbSet = set; lbIndex = i; updateLB(); lb.classList.add('open'); }
     function updateLB(){ const it = lbSet[lbIndex]; lbImg.src = it.src; lbCap.textContent = it.cap || it.alt || ''; }
@@ -508,28 +391,17 @@
     lbPrev.addEventListener('click', prevLB);
     lbNext.addEventListener('click', nextLB);
     lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
-    window.addEventListener('keydown', (e)=>{
-      if(!lb.classList.contains('open')) return;
-      if(e.key === 'Escape') closeLB();
-      if(e.key === 'ArrowLeft') prevLB();
-      if(e.key === 'ArrowRight') nextLB();
-    });
+    window.addEventListener('keydown', (e)=>{ if(!lb.classList.contains('open')) return;
+      if(e.key==='Escape') closeLB(); if(e.key==='ArrowLeft') prevLB(); if(e.key==='ArrowRight') nextLB(); });
 
-    // Init: render list, deep-link to hash if present, load first chapter (intro)
+    /* Init */
     function init(){
       document.title = STORY.title || document.title;
       renderChapterList();
-
       const id = location.hash.replace('#','');
       const idx = STORY.chapters.findIndex(c => c.id === id);
-      if(idx >= 0){
-        // Adjust currentPage so the hashed chapter is visible
-        currentPage = Math.floor(idx / CHAPTERS_PER_PAGE);
-        renderChapterList();
-        loadChapter(idx);
-      } else {
-        loadChapter(0); // default to first chapter
-      }
+      if(idx >= 0){ currentPage = Math.floor(idx / CHAPTERS_PER_PAGE); renderChapterList(); loadChapter(idx); }
+      else { loadChapter(0); }
     }
     init();
   </script>
