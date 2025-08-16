@@ -16,12 +16,48 @@
     body{
       margin:0; font-family:"Merriweather", ui-serif, Georgia, serif; color:var(--text);
       background:
-        radial-gradient(900px 700px at 20% -10%, #1a1d24 0%, transparent 60%),
-        radial-gradient(1000px 800px at 120% -30%, #19121e 0%, transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg0));
-      /* keep content off the bottom chrome/safe area */
-      padding-bottom: calc(24px + env(safe-area-inset-bottom));
-    }
+    linear-gradient(180deg, #111317 0, #111317 1000px, #000 1000px, #000 100%),
+
+    /* Layer 2: accent radial (no repeat, fixed size, positioned) */
+    radial-gradient(900px 700px at 20% -10%, #1a1d24 0%, transparent 60%),
+
+    /* Layer 3: second accent radial (no repeat) */
+    radial-gradient(1000px 800px at 120% -30%, #19121e 0%, transparent 60%),
+
+    /* Fallback base color */
+    #000;
+
+  /* Prevent any tiling that can cause “choppy” look on tall pages */
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+
+  /* Explicit sizes for the radials so they don’t scale/retile oddly */
+  background-size:
+    100% 100%,        /* linear gradient covers page */
+    900px 700px,      /* first radial */
+    1000px 800px,     /* second radial */
+    auto;
+
+  /* Positions match your original vibe; tweak if you like */
+  background-position:
+    top left,
+    20% -10%,
+    120% -30%,
+    center;
+
+  /* Keep content off the bottom chrome/safe area */
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+@media (max-width: 880px){
+  /* On small screens, make the background even calmer */
+  body{
+    background:
+      linear-gradient(180deg, #111317 0, #111317 900px, #000 900px, #000 100%),
+      #000;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 100% 100%, auto;
+    background-position: top left, center;
+  }
+}
 
     .shell{ display:grid; grid-template-columns:300px 1fr; gap:18px; max-width:1200px; margin:24px auto; padding:0 16px; }
     header.topbar{
@@ -47,15 +83,18 @@
     .brand p{ margin:0; color:var(--muted); font-size:12px; }
 
     /* Moved here: All-Chapter Gallery button (inverted) */
-    .brand .btn-invert{
-      width:100%; margin-top:8px;
-      padding:10px 12px; border-radius:10px; border:1px solid var(--text);
-      background:var(--text); color:#0c0f15; font-weight:700; cursor:pointer;
-    }
-    .brand .btn-invert:hover{
-      background:transparent; color:var(--text);
-      box-shadow:0 0 0 3px rgba(236,239,244,.12);
-    }
+	.brand .btn-invert{
+	width:100%; margin-top:8px;
+	padding:10px 12px; border-radius:10px; cursor:pointer;
+	background:#0b0e14; color:var(--text);
+	border:1px solid var(--border); font-weight:600;
+	}
+	.brand .btn-invert:hover{
+	border-color: rgba(184,74,74,.45);
+	box-shadow: 0 0 0 3px rgba(184,74,74,.20);
+	color:#fff;
+	}
+
 
     .chap-wrap{ display:flex; flex-direction:column; height:calc(100% - 88px); }
     .chapters{ list-style:none; margin:0; padding:10px; overflow:auto; }
