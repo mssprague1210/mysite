@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hobbies – Matthew Sprague</title>
+  <meta name="description" content="Hobbies and outdoor pursuits: triathlon, running, cycling, kayaking." />
+  <meta name="theme-color" content="#234F2E" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#F9F9F7;--ink:#1C1B1A;--green:#234F2E;--gold:#C6A453;--muted:#5E5E5E;--maxw:1000px;--radius:16px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:'Figtree',system-ui}
+    h1,h2,h3,nav{font-family:'Ubuntu',system-ui;color:var(--green)}
+    a{color:var(--gold);text-decoration:none}
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 1.2rem}
+    .top-nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid rgba(28,27,26,.06)}
+    .top-nav .container{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem}
+    .menu{display:flex;gap:1.2rem}.menu a{color:var(--green);font-weight:500;padding:.35rem .5rem;border-bottom:2px solid transparent}
+    .menu a:hover{color:var(--gold);border-color:var(--gold)}.menu a.active{border-color:var(--green)}
+    main{padding:2.5rem 0}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
+    .card{grid-column:span 12;padding:1rem;border:1px solid rgba(28,27,26,.08);border-radius:16px;background:rgba(255,255,255,.6)}
+    @media(min-width:720px){.card{grid-column:span 6}}
+    footer{padding:3rem 0;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <nav class="top-nav" aria-label="Primary">
+    <div class="container">
+      <a class="brand" href="/"><span class="name">Matthew Sprague</span></a>
+      <div class="menu" role="menubar">
+        <a role="menuitem" href="/">Home</a>
+        <a role="menuitem" href="/resume/">Resume</a>
+        <a role="menuitem" class="active" href="/hobbies/">Hobbies</a>
+        <a role="menuitem" href="/trips/">Trips</a>
+        <a role="menuitem" href="/dnd/">DND Campaign</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Hobbies</h1>
+    <p>Outdoors keeps me clear-headed. Here are a few things I love doing and tinkering with.</p>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Triathlon & Running</h2>
+        <p>Balancing swim strength with sustainable run training; dialing in fueling, cadence, and mobility.</p>
+      </section>
+      <section class="card">
+        <h2>Cycling</h2>
+        <p>Gravel rides for quiet headspace; road for speed. Gear choices that favor practical, durable design.</p>
+      </section>
+      <section class="card">
+        <h2>Kayaking</h2>
+        <p>Lake paddles and easy river floats. Notes on boats, paddles, and storage/transport solutions.</p>
+      </section>
+      <section class="card">
+        <h2>Jewelry/Metalsmithing</h2>
+        <p>Simple pendants, high polish, and learning CAD workflows for clean forms.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="container"><p>© <span id="year-h"></span> Matthew Sprague</p></footer>
+  <script>document.getElementById('year-h').textContent=new Date().getFullYear();</script>
+</body>
+</html>
