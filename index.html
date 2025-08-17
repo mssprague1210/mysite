@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -7,29 +8,7 @@
   <meta name="theme-color" content="#234F2E" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root { --bg:#F9F9F7; --ink:#1C1B1A; --green:#234F2E; --gold:#C6A453; --muted:#5E5E5E; --maxw:1000px; --radius:16px; }
-    html,body{height:100%}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Figtree',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-    h1,h2,h3,h4,h5,h6,nav,.button,.eyebrow{font-family:'Ubuntu',system-ui,-apple-system,Segoe UI,Roboto,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";color:var(--green)}
-    a{color:var(--gold);text-decoration:none}a:focus{outline:3px solid var(--gold);outline-offset:2px}
-    .container{max-width:var(--maxw);margin:0 auto;padding:0 1.2rem}
-    .top-nav{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid rgba(28,27,26,.06);backdrop-filter:saturate(160%) blur(6px)}
-    .top-nav .container{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem}
-    .brand{display:flex;align-items:center;gap:.6rem}.brand img{width:24px;height:24px;border-radius:4px}.brand .name{font-weight:700;letter-spacing:.2px}
-    .menu{display:flex;align-items:center;gap:1.2rem}
-    .menu a{color:var(--green);font-weight:500;padding:.35rem .5rem;border-bottom:2px solid transparent;transition:color .2s ease,border-color .2s ease}
-    .menu a:hover{color:var(--gold);border-color:var(--gold)}.menu a.active{border-color:var(--green)}
-    header.hero{padding:5rem 0 3rem}
-    .eyebrow{text-transform:uppercase;font-weight:700;letter-spacing:.08em;color:var(--gold);font-size:.85rem;margin-bottom:.5rem}
-    .hero h1{font-size:clamp(2rem,4vw,3rem);margin:0 0 .5rem}
-    .hero p{font-size:clamp(1rem,1.6vw,1.125rem);color:var(--ink);max-width:70ch}
-    .cta-row{display:flex;gap:.8rem;margin-top:1.25rem;flex-wrap:wrap}
-    .button{display:inline-block;padding:.7rem 1rem;border-radius:var(--radius);font-weight:600;border:2px solid var(--green);color:var(--bg);background:var(--green);transition:transform .08s ease,background .2s ease,color .2s ease,border-color .2s ease}
-    .button:hover{background:transparent;color:var(--green)}.button.alt{background:transparent;color:var(--green);border-color:var(--gold)}.button.alt:hover{color:var(--bg);background:var(--gold)}
-    footer{padding:3rem 0;color:var(--muted);font-size:.95rem}
-    @media (prefers-reduced-motion: reduce){*{transition:none !important;scroll-behavior:auto !important}}
-  </style>
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <nav class="top-nav" aria-label="Primary">
@@ -45,6 +24,16 @@
         <a role="menuitem" href="/trips/">Trips</a>
         <a role="menuitem" href="/story/">DND Campaign</a>
       </div>
+      <button class="hamburger" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+        <span class="bars" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div id="mobile-panel" class="mobile-panel" role="menu">
+      <a href="/" role="menuitem">Home</a>
+      <a href="/resume/" role="menuitem">Resume</a>
+      <a href="/hobbies/" role="menuitem">Hobbies</a>
+      <a href="/trips/" role="menuitem">Trips</a>
+      <a href="/story/" role="menuitem">DND Campaign</a>
     </div>
   </nav>
 
@@ -63,6 +52,24 @@
   <footer class="container">
     <p>© <span id="year"></span> Matthew Sprague. Forest green & gold. Hosted on Cloudflare; Netlify deploys.</p>
   </footer>
-  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const btn = document.querySelector('.hamburger');
+    const panel = document.getElementById('mobile-panel');
+    if (btn && panel) {
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        document.body.classList.toggle('mobile-open', !open);
+      });
+      panel.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+          btn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('mobile-open');
+        }
+      });
+    }
+  </script>
 </body>
 </html>
