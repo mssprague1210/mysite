@@ -8,23 +8,7 @@
   <meta name="theme-color" content="#234F2E" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root{--bg:#F9F9F7;--ink:#1C1B1A;--green:#234F2E;--gold:#C6A453;--muted:#5E5E5E;--maxw:1000px;--radius:16px}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:'Figtree',system-ui}
-    h1,h2,h3,nav{font-family:'Ubuntu',system-ui;color:var(--green)}
-    a{color:var(--gold);text-decoration:none}
-    .container{max-width:var(--maxw);margin:0 auto;padding:0 1.2rem}
-    .top-nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid rgba(28,27,26,.06)}
-    .top-nav .container{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem}
-    .menu{display:flex;gap:1.2rem}.menu a{color:var(--green);font-weight:500;padding:.35rem .5rem;border-bottom:2px solid transparent}
-    .menu a:hover{color:var(--gold);border-color:var(--gold)}.menu a.active{border-color:var(--green)}
-    main{padding:2.5rem 0}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
-    .card{grid-column:span 12;padding:1rem;border:1px solid rgba(28,27,26,.08);border-radius:16px;background:rgba(255,255,255,.6)}
-    @media(min-width:720px){.card{grid-column:span 6}}
-    footer{padding:3rem 0;color:var(--muted)}
-  </style>
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <nav class="top-nav" aria-label="Primary">
@@ -37,6 +21,16 @@
         <a role="menuitem" href="/trips/">Trips</a>
         <a role="menuitem" href="/story/">DND Campaign</a>
       </div>
+      <button class="hamburger" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+        <span class="bars" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div id="mobile-panel" class="mobile-panel" role="menu">
+      <a href="/" role="menuitem">Home</a>
+      <a href="/resume/" role="menuitem">Resume</a>
+      <a href="/hobbies/" role="menuitem">Hobbies</a>
+      <a href="/trips/" role="menuitem">Trips</a>
+      <a href="/story/" role="menuitem">DND Campaign</a>
     </div>
   </nav>
 
@@ -65,6 +59,22 @@
   </main>
 
   <footer class="container"><p>© <span id="year-h"></span> Matthew Sprague</p></footer>
-  <script>document.getElementById('year-h').textContent=new Date().getFullYear();</script>
+  <script>document.getElementById('year-h').textContent = new Date().getFullYear();
+    const btn = document.querySelector('.hamburger');
+    const panel = document.getElementById('mobile-panel');
+    if (btn && panel) {
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        document.body.classList.toggle('mobile-open', !open);
+      });
+      panel.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+          btn.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('mobile-open');
+        }
+      });
+    }
+  </script>
 </body>
 </html>
