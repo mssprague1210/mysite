@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume – Matthew Sprague</title>
+  <meta name="description" content="Resume for Matthew Sprague: digital platforms, UX experimentation, analytics, and data governance." />
+  <meta name="theme-color" content="#234F2E" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#F9F9F7;--ink:#1C1B1A;--green:#234F2E;--gold:#C6A453;--muted:#5E5E5E;--maxw:1000px;--radius:16px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:'Figtree',system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
+    h1,h2,h3,nav{font-family:'Ubuntu',system-ui; color:var(--green)}
+    a{color:var(--gold);text-decoration:none}
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 1.2rem}
+    .top-nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid rgba(28,27,26,.06)}
+    .top-nav .container{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem}
+    .menu{display:flex;gap:1.2rem}.menu a{color:var(--green);font-weight:500;padding:.35rem .5rem;border-bottom:2px solid transparent}
+    .menu a:hover{color:var(--gold);border-color:var(--gold)}.menu a.active{border-color:var(--green)}
+    main{padding:2.5rem 0}
+    .lead{max-width:70ch}
+    .section{margin-top:2rem}
+    .role{padding:1rem;border:1px solid rgba(28,27,26,.08);border-radius:16px;background:rgba(255,255,255,.6);margin-bottom:1rem}
+    .role h3{margin:.2rem 0}
+    footer{padding:3rem 0;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <nav class="top-nav" aria-label="Primary">
+    <div class="container">
+      <a class="brand" href="/"><span class="name">Matthew Sprague</span></a>
+      <div class="menu" role="menubar">
+        <a role="menuitem" href="/">Home</a>
+        <a role="menuitem" class="active" href="/resume/">Resume</a>
+        <a role="menuitem" href="/hobbies/">Hobbies</a>
+        <a role="menuitem" href="/trips/">Trips</a>
+        <a role="menuitem" href="/dnd/">DND Campaign</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Resume</h1>
+    <p class="lead">Digital platforms leader focused on human-centered UX, experimentation, and analytics. I translate business goals into experiences people actually enjoy using.</p>
+
+    <section class="section">
+      <h2>Experience</h2>
+      <article class="role">
+        <h3>Senior Manager, Digital Platforms — Verizon</h3>
+        <p><em>Experience testing • Adobe Analytics • A/B testing • Data governance</em></p>
+        <ul>
+          <li>Led experimentation strategy across key funnels; improved engagement and revenue with data-backed decisions.</li>
+          <li>Owned data layer + governance standards to accelerate analysis without sacrificing quality.</li>
+          <li>Partnered with product/design/engineering to ship iterative improvements quickly.</li>
+        </ul>
+      </article>
+      <article class="role">
+        <h3>Previous Roles — Strategy & Analytics</h3>
+        <ul>
+          <li>Progressed through analyst → consultant → manager roles focused on testing, measurement, and platform ownership.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2>Skills</h2>
+      <p>UX research & heuristics, A/B & multivariate testing, Adobe Analytics/AEM/Target, data governance, stakeholder alignment, roadmap planning.</p>
+    </section>
+
+    <section class="section">
+      <h2>Download</h2>
+      <p><a href="/assets/matthew-sprague-resume.pdf">Download PDF</a> (replace with your path)</p>
+    </section>
+  </main>
+
+  <footer class="container"><p>© <span id="year-r"></span> Matthew Sprague</p></footer>
+  <script>document.getElementById('year-r').textContent=new Date().getFullYear();</script>
+</body>
+</html>
