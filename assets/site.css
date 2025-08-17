@@ -52,10 +52,20 @@ a:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
 .hamburger .bars::before { top: -6px; } .hamburger .bars::after { top: 6px; }
 
 /* Mobile panel */
-.mobile-panel { display: none; position: fixed; inset: 64px 0 0 0; background: var(--bg); border-top: 1px solid rgba(28,27,26,0.06); padding: 1rem 1.2rem; }
+.mobile-panel {
+  display: none;
+  position: fixed;
+  inset: 64px 0 0 0;
+  background: var(--bg); /* your off-white */
+  border-top: 1px solid rgba(28,27,26,.06);
+  padding: 1rem 1.2rem;
+  z-index: 999; /* keep above content */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 .mobile-panel a { display: block; padding: .8rem 0; color: var(--green); font-weight: 600; border-bottom: 1px solid rgba(28,27,26,0.06); }
 .mobile-open { overflow: hidden; }
 .mobile-open .mobile-panel { display: block; }
+
 
 @media (max-width: 720px) { .menu { display: none; } .hamburger { display: flex; } }
 
