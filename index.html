@@ -1,92 +1,259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Matt Sprague</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <title>Matthew Sprague</title>
+  <meta name="description" content="Matthew Sprague – digital platforms strategist focused on user-friendly design, data-driven experimentation, and a life spent outdoors." />
+  <meta name="theme-color" content="#234F2E" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="shortcut icon" href="/favicon.ico">
 
+  <!-- Fonts: Ubuntu (headings) + Figtree (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
   <style>
+
+    :root {
+      --bg: #F9F9F7;           /* off-white */
+      --ink: #1C1B1A;          /* charcoal */
+      --green: #234F2E;        /* forest green */
+      --gold: #C6A453;         /* gold accent */
+      --muted: #5E5E5E;        /* secondary text */
+      --maxw: 1000px;          /* readable line length */
+      --radius: 16px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #11110F;
+        --ink: #EEEDEB;
+        --muted: #B5B5B3;
+      }
+      body { background-image: radial-gradient(transparent 60%, rgba(198,164,83,0.03)); }
+    }
+
+
+    html, body { height: 100%; }
     body {
       margin: 0;
-      font-family: system-ui, sans-serif;
-      background-color: #0b0d12;
-      color: #e8ecf4;
-    }
-    header {
-      background: #121621;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    header h1 {
-      font-size: 1.25rem;
-      margin: 0;
-    }
-    nav a {
-      color: #e8ecf4;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 1rem;
-    }
-    nav a:hover {
-      color: #7cc4ff;
-    }
-    main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-    h2 {
-      color: #7cc4ff;
-      margin-bottom: 0.5rem;
-    }
-    p {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Figtree', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    h1, h2, h3, h4, h5, h6, nav, .button, .eyebrow {
+      font-family: 'Ubuntu', system-ui, -apple-system, Segoe UI, Roboto, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--green);
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:focus { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 1.2rem; }
+
+
+    .top-nav {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--bg);
+      border-bottom: 1px solid rgba(28,27,26,0.06);
+      backdrop-filter: saturate(160%) blur(6px);
+    }
+    .top-nav .container {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .9rem 1.2rem;
+    }
+    .brand { display: flex; align-items: center; gap: .6rem; }
+    .brand img { width: 24px; height: 24px; border-radius: 4px; }
+    .brand .name { font-weight: 700; letter-spacing: .2px; }
+
+    .menu { display: flex; align-items: center; gap: 1.2rem; }
+    .menu a {
+      color: var(--green);
+      font-weight: 500;
+      padding: .35rem .5rem;
+      border-bottom: 2px solid transparent;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .menu a:hover { color: var(--gold); border-color: var(--gold); }
+    .menu a.active { border-color: var(--green); }
+
+    /* --------------
+       Hero / Home
+       -------------- */
+    header.hero {
+      padding: 5rem 0 3.5rem;
+    }
+    .eyebrow {
+      text-transform: uppercase; font-weight: 700; letter-spacing: .08em;
+      color: var(--gold); font-size: .85rem; margin-bottom: .5rem;
+    }
+    .hero h1 { font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 .5rem; }
+    .hero p { font-size: clamp(1rem, 1.6vw, 1.125rem); color: var(--ink); max-width: 70ch; }
+
+    .hero .cta-row { display: flex; gap: .8rem; margin-top: 1.25rem; flex-wrap: wrap; }
+    .button {
+      display: inline-block; padding: .7rem 1rem; border-radius: var(--radius);
+      font-weight: 600; border: 2px solid var(--green);
+      color: var(--bg); background: var(--green);
+      transition: transform .08s ease, background .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .button:hover { background: transparent; color: var(--green); }
+    .button.alt { background: transparent; color: var(--green); border-color: var(--gold); }
+    .button.alt:hover { color: var(--bg); background: var(--gold); }
+
+    /* --------------
+       Sections (Resume, Hobbies, Trips)
+       -------------- */
+	   
+    section { padding: 3rem 0; }
+    section .section-head { display: flex; align-items: baseline; gap: .75rem; margin-bottom: 1.2rem; }
+    section .section-head h2 { margin: 0; font-size: clamp(1.4rem, 2.4vw, 2rem); }
+    section .section-head .line { flex: 1; height: 2px; background: linear-gradient(90deg, var(--gold), rgba(198,164,83,0)); border-radius: 2px; }
+
+    .card-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+    .card { grid-column: span 12; padding: 1rem; border: 1px solid rgba(28,27,26,0.08); border-radius: var(--radius); background: rgba(255,255,255,0.6); }
+    .card h3 { margin-top: 0; }
+
+    @media (min-width: 720px) {
+      .card { grid-column: span 6; }
+    }
+
+    footer { padding: 3rem 0; color: var(--muted); font-size: .95rem; }
+
+    /* Reduce animations if preferred */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; scroll-behavior: auto !important; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Matt Sprague</h1>
-    <nav>
-      <a href="#profile">Profile</a>
-      <a href="#resume">Resume</a>
-      <a href="#hobbies">Hobbies</a>
-      <a href="#other">Other</a>
-    </nav>
+  <!-- Top Navigation -->
+  <nav class="top-nav" aria-label="Primary">
+    <div class="container">
+      <a class="brand" href="#home">
+        <img src="/favicon.png" alt="M.S. favicon" />
+        <span class="name">Matthew Sprague</span>
+      </a>
+      <div class="menu" role="menubar">
+        <a role="menuitem" class="active" href="#home">Home</a>
+        <a role="menuitem" href="#resume">Resume</a>
+        <a role="menuitem" href="#hobbies">Hobbies</a>
+        <a role="menuitem" href="#trips">Trips</a>
+        <a role="menuitem" href="/dnd/index.html">DND Campaign</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero / Home -->
+  <header id="home" class="hero">
+    <div class="container">
+      <div class="eyebrow">Digital Platforms • UX • Outdoors</div>
+      <h1>Hi, I’m Matthew — I design and lead digital experiences that feel simple and human.</h1>
+      <p>
+        I’m a digital platforms strategist with a love for clean, user-centered design and data-informed experimentation. My work focuses on
+        making complex journeys intuitive — the kind of experiences people actually enjoy using. When I’m off the clock, you’ll usually find me on a bike,
+        in a kayak, or exploring new trails. That time outside keeps my problem‑solving grounded and my approach calm.
+      </p>
+      <div class="cta-row">
+        <a class="button" href="#resume">View Resume</a>
+        <a class="button alt" href="#hobbies">See Hobbies</a>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section id="profile">
-      <h2>Profile</h2>
-      <p>Brief introduction about you will go here.</p>
-    </section>
+  <!-- Resume Preview Section -->
+  <section id="resume" aria-labelledby="resume-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="resume-title">Resume</h2>
+        <div class="line" aria-hidden="true"></div>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Senior Manager, Digital Platforms — Verizon</h3>
+          <p class="muted">Experience testing • Adobe Analytics • A/B testing • Data governance</p>
+          <p>Led high-impact experimentation and data-layer initiatives to improve customer engagement and drive revenue. Built frameworks that balance speed with governance.</p>
+        </article>
+        <article class="card">
+          <h3>Earlier Roles — Strategy & Analytics</h3>
+          <p>Progressive roles in digital analytics, targeting, and platform ownership. Comfortable translating between product, design, and engineering to ship meaningful work.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-    <section id="resume">
-      <h2>Resume</h2>
-      <p>A quick overview of your career or a link to your full resume.</p>
-    </section>
+  <!-- Hobbies Section -->
+  <section id="hobbies" aria-labelledby="hobbies-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="hobbies-title">Hobbies</h2>
+        <div class="line" aria-hidden="true"></div>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Triathlon & Running</h3>
+          <p>Balancing swim strength with steady run training; focusing on form, mobility, and smart fueling.</p>
+        </article>
+        <article class="card">
+          <h3>Cycling & Kayaking</h3>
+          <p>Gravel riding for headspace; lake paddles for calm. Gear choices favor practical, durable design.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-    <section id="hobbies">
-      <h2>Hobbies</h2>
-      <p>Details about your hobbies, projects, and interests.</p>
-    </section>
+  <!-- Trips Section -->
+  <section id="trips" aria-labelledby="trips-title">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="trips-title">Trips</h2>
+        <div class="line" aria-hidden="true"></div>
+      </div>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Recent Adventures</h3>
+          <p>Short blurbs or photo grids can live here — think trail notes, galleries, and GPX links.</p>
+        </article>
+        <article class="card">
+          <h3>Planning & Wishlists</h3>
+          <p>Upcoming routes, packing lists, or destinations you’re considering.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-    <section id="other">
-      <h2>Other</h2>
-      <p>Anything else you want to include, like your story project: 
-         <a href="/story/">View Story Showcase</a>.
-      </p>
-    </section>
-  </main>
+  <footer class="container">
+    <p>© <span id="year"></span> Matthew Sprague. Built with Ubuntu + Figtree, forest green & gold. Hosted on Cloudflare, deployed via Netlify.</p>
+  </footer>
+
+  <script>
+    // Update year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // IntersectionObserver to highlight active nav link
+    const sections = document.querySelectorAll('header.hero, section');
+    const links = document.querySelectorAll('.menu a[href^="#"]');
+    const map = new Map(Array.from(links, a => [a.getAttribute('href').slice(1), a]));
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id || 'home';
+          links.forEach(a => a.classList.remove('active'));
+          const link = map.get(id);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -55% 0px', threshold: 0.01 });
+
+    sections.forEach(s => io.observe(s));
+  </script>
 </body>
 </html>
