@@ -189,13 +189,13 @@
             const hour = timestamp.getHours();
             const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // Set AM/PM class for icon background
-            if (hour >= 5 && hour < 18) { // 5 AM to 6 PM is considered "day"
-                weatherIconEl.classList.add('is-am');
-                weatherIconEl.classList.remove('is-pm');
+            // Set day/night class for icon background based on daylight hours
+            if (hour >= 6 && hour < 18) { // 6 AM to 6 PM is considered "day"
+                weatherIconEl.classList.add('is-day');
+                weatherIconEl.classList.remove('is-night');
             } else {
-                weatherIconEl.classList.add('is-pm');
-                weatherIconEl.classList.remove('is-am');
+                weatherIconEl.classList.add('is-night');
+                weatherIconEl.classList.remove('is-day');
             }
 
             locationEl.textContent = `Your forecast in ${data.name}`;
