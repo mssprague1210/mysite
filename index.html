@@ -9,7 +9,7 @@
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/assets/site.css?v=8" />
+  <link rel="stylesheet" href="/assets/site.css?v=9" />
 
   <!-- Perf: optional if you remove @import in CSS later -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,6 +82,7 @@
                 <div class="weather-details">
                     <p id="weather-location">Fetching your location...</p>
                     <p id="weather-temp-desc"></p>
+                    <p id="weather-timestamp"></p>
                 </div>
             </div>
             <div class="recommendation">
@@ -151,10 +152,11 @@
     const widgetCard = document.getElementById('widget-card');
 
     const weatherWidget = () => {
-        const apiKey = '4d23d6450c33705bb7fd5bb72ee1111a'; //
+        const apiKey = 'YOUR_API_KEY_HERE'; // <-- IMPORTANT: PASTE YOUR API KEY HERE
         const weatherIconEl = document.getElementById('weather-icon');
         const locationEl = document.getElementById('weather-location');
         const tempDescEl = document.getElementById('weather-temp-desc');
+        const timestampEl = document.getElementById('weather-timestamp');
         const recommendationTextEl = document.getElementById('recommendation-text');
         const recommendationLinkEl = document.getElementById('recommendation-link');
 
@@ -202,9 +204,12 @@
             const description = data.weather[0].description;
             const iconCode = data.weather[0].icon;
             const weatherId = data.weather[0].id;
+            const timestamp = new Date(data.dt * 1000);
+            const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             locationEl.textContent = `Your forecast in ${data.name}`;
             tempDescEl.textContent = `${temp}°F, ${description}`;
+            timestampEl.textContent = `Updated at ${formattedTime}`;
             weatherIconEl.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}@2x.png" alt="${description}">`;
 
             let recommendation;
