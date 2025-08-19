@@ -11,16 +11,12 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/assets/site.css?v=6" />
 
-  <!-- Perf: optional if you remove @import in CSS later -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Skip link for keyboard/screen-reader users -->
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- ✅ NAV MUST BE INSIDE <body> -->
+  <a class="skip-link" href="#main" aria-controls="main">Skip to content</a>
   <nav class="top-nav" aria-label="Primary">
     <div class="container">
       <a class="brand" href="/">
@@ -40,14 +36,12 @@
         class="hamburger"
         aria-label="Menu"
         aria-controls="mobile-panel"
-        aria-haspopup="true"
         aria-expanded="false">
         <span class="bars" aria-hidden="true"></span>
       </button>
     </div>
   </nav>
 
-  <!-- Mobile nav is its own landmark and outside the sticky nav -->
   <nav id="mobile-panel" class="mobile-panel" aria-label="Mobile navigation">
     <a href="/">Home</a>
     <a href="/resume/">Resume</a>
@@ -79,17 +73,36 @@
 
     const btn = document.querySelector('.hamburger');
     const panel = document.getElementById('mobile-panel');
-    const firstLink = panel ? panel.querySelector('a') : null;
+    const focusableElements = panel ? panel.querySelectorAll('a') : [];
+    const firstLink = focusableElements[0];
+    const lastLink = focusableElements[focusableElements.length - 1];
 
     function openMenu() {
       btn.setAttribute('aria-expanded', 'true');
       document.body.classList.add('mobile-open');
+      panel.addEventListener('keydown', trapFocus);
       firstLink && firstLink.focus();
     }
     function closeMenu() {
       btn.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('mobile-open');
+      panel.removeEventListener('keydown', trapFocus);
       btn.focus();
+    }
+
+    function trapFocus(e) {
+      if (e.key === 'Tab') {
+        // If shift-tabbing from the first link, loop to the last
+        if (e.shiftKey && document.activeElement === firstLink) {
+          e.preventDefault();
+          lastLink.focus();
+        }
+        // If tabbing from the last link, loop to the first
+        else if (!e.shiftKey && document.activeElement === lastLink) {
+          e.preventDefault();
+          firstLink.focus();
+        }
+      }
     }
 
     if (btn && panel) {
