@@ -192,6 +192,90 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
   color: var(--muted);
 }
 
+/* Weather Widget Card */
+#gear-forecast {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.widget-card {
+  background: #fff;
+  border: 1px solid rgba(28,27,26,0.08);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.weather-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#weather-icon {
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.03);
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+#weather-icon img {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.weather-details p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+#weather-location {
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 700;
+  color: var(--green);
+  font-size: 1.125rem;
+}
+
+#weather-temp-desc {
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+#weather-timestamp {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.recommendation p {
+  margin: 0 0 1rem;
+  max-width: 65ch;
+}
+
+/* Responsive layout for the widget */
+@media (min-width: 720px) {
+  .widget-card {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+  .recommendation p {
+    margin-bottom: 0;
+  }
+  .recommendation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+}
+
+
 
 /* Footer */
 footer { padding: 3rem 0; color: var(--muted); font-size: .95rem; }
