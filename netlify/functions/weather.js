@@ -9,7 +9,7 @@ exports.handler = async function(event, context) {
   const { lat, lon } = event.queryStringParameters;
 
   // Construct the API URL
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${4d23d6450c33705bb7fd5bb72ee1111a}&units=imperial`;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
 
   try {
     // Fetch the weather data from the API
