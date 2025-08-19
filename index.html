@@ -9,14 +9,16 @@
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/assets/site.css?v=6" />
+  <link rel="stylesheet" href="/assets/site.css?v=8" />
 
+  <!-- Perf: optional if you remove @import in CSS later -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <a class="skip-link" href="#main" aria-controls="main">Skip to content</a>
+  <!-- Skip link for keyboard/screen-reader users -->
+  <a class="skip-link" href="#main">Skip to content</a>
   <nav class="top-nav" aria-label="Primary">
     <div class="container">
       <a class="brand" href="/">
@@ -42,6 +44,7 @@
     </div>
   </nav>
 
+  <!-- Mobile nav is its own landmark and outside the sticky nav -->
   <nav id="mobile-panel" class="mobile-panel" aria-label="Mobile navigation">
     <a href="/">Home</a>
     <a href="/resume/">Resume</a>
@@ -54,14 +57,40 @@
     <header id="home" class="hero">
       <div class="container">
         <div class="eyebrow">Digital Platforms • UX • Outdoors</div>
-        <h1>Hi, I’m Matthew — Please explore my website and get to know me!</h1>
-        <p>I’m a digital platforms strategist with a love for user-centered design and data-informed experimentation.</p>
+        <h1>Hi, I’m Matthew — I design and lead digital experiences that feel simple and human.</h1>
+        <p>I’m a digital platforms strategist with a love for user-centered design and data-informed experimentation. This space will expand with recent projects, writing, and ways I bring an outdoor mindset to digital work.</p>
         <div class="cta-row">
           <a class="button" href="/resume/">View Resume</a>
           <a class="button alt" href="/hobbies/">See Hobbies</a>
         </div>
       </div>
     </header>
+
+    <!-- Weather Widget Section -->
+    <section id="gear-forecast" class="container">
+        <!-- Initial prompt, visible by default -->
+        <div id="widget-prompt" class="widget-prompt">
+            <h2>Gear Forecaster</h2>
+            <p>Check the weather by you to get recommendations on great gear!</p>
+            <button id="forecast-button" class="button">Gear Forecast</button>
+        </div>
+
+        <!-- Weather card, hidden by default -->
+        <div id="widget-card" class="widget-card" style="display: none;">
+            <div class="weather-info">
+                <div id="weather-icon"></div>
+                <div class="weather-details">
+                    <p id="weather-location">Fetching your location...</p>
+                    <p id="weather-temp-desc"></p>
+                </div>
+            </div>
+            <div class="recommendation">
+                <p id="recommendation-text">Finding the right gear for you...</p>
+                <a id="recommendation-link" href="#" class="button" target="_blank" rel="noopener noreferrer" style="display: none;">Check it out</a>
+            </div>
+        </div>
+    </section>
+
   </main>
 
   <footer class="container">
@@ -69,6 +98,7 @@
   </footer>
 
   <script>
+    // --- Standard Page Scripts ---
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const btn = document.querySelector('.hamburger');
@@ -89,22 +119,17 @@
       panel.removeEventListener('keydown', trapFocus);
       btn.focus();
     }
-
     function trapFocus(e) {
       if (e.key === 'Tab') {
-        // If shift-tabbing from the first link, loop to the last
         if (e.shiftKey && document.activeElement === firstLink) {
           e.preventDefault();
           lastLink.focus();
-        }
-        // If tabbing from the last link, loop to the first
-        else if (!e.shiftKey && document.activeElement === lastLink) {
+        } else if (!e.shiftKey && document.activeElement === lastLink) {
           e.preventDefault();
           firstLink.focus();
         }
       }
     }
-
     if (btn && panel) {
       btn.addEventListener('click', () => {
         const open = btn.getAttribute('aria-expanded') === 'true';
@@ -119,6 +144,109 @@
         }
       });
     }
+
+    // --- Weather Widget Script ---
+    const forecastButton = document.getElementById('forecast-button');
+    const widgetPrompt = document.getElementById('widget-prompt');
+    const widgetCard = document.getElementById('widget-card');
+
+    const weatherWidget = () => {
+        const apiKey = 'YOUR_API_KEY_HERE'; // <-- IMPORTANT: PASTE YOUR API KEY HERE
+        const weatherIconEl = document.getElementById('weather-icon');
+        const locationEl = document.getElementById('weather-location');
+        const tempDescEl = document.getElementById('weather-temp-desc');
+        const recommendationTextEl = document.getElementById('recommendation-text');
+        const recommendationLinkEl = document.getElementById('recommendation-link');
+
+        const recommendations = {
+            hot: {
+                text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key. Take a look at some great hydration packs.",
+                link: "https://www.rei.com/c/hydration-packs"
+            },
+            rain: {
+                text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.",
+                link: "https://www.outdoorresearch.com/collections/mens-rain-jackets"
+            },
+            cold: {
+                text: "It's chilly! Layering up is the best way to stay warm on your adventures. Check out these versatile base layers.",
+                link: "https://www.rei.com/c/mens-base-layer-tops"
+            },
+            snow: {
+                text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.",
+                link: "https://www.rei.com/c/mens-winter-boots"
+            },
+            clear: {
+                text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.",
+                link: "https://www.rei.com/c/sunglasses"
+            },
+            default: {
+                text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.",
+                link: "https://www.rei.com/"
+            }
+        };
+
+        const getWeatherData = async (lat, lon) => {
+            try {
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`);
+                if (!response.ok) throw new Error('Weather data not available.');
+                const data = await response.json();
+                updateWidget(data);
+            } catch (error) {
+                locationEl.textContent = 'Could not fetch weather.';
+                console.error(error);
+            }
+        };
+
+        const updateWidget = (data) => {
+            const temp = Math.round(data.main.temp);
+            const description = data.weather[0].description;
+            const iconCode = data.weather[0].icon;
+            const weatherId = data.weather[0].id;
+
+            locationEl.textContent = `Your forecast in ${data.name}`;
+            tempDescEl.textContent = `${temp}°F, ${description}`;
+            weatherIconEl.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}@2x.png" alt="${description}">`;
+
+            let recommendation;
+            if (temp > 85) recommendation = recommendations.hot;
+            else if (weatherId >= 200 && weatherId < 600) recommendation = recommendations.rain;
+            else if (weatherId >= 600 && weatherId < 700) recommendation = recommendations.snow;
+            else if (temp < 40) recommendation = recommendations.cold;
+            else if (weatherId === 800) recommendation = recommendations.clear;
+            else recommendation = recommendations.default;
+            
+            recommendationTextEl.textContent = recommendation.text;
+            recommendationLinkEl.href = recommendation.link;
+            recommendationLinkEl.style.display = 'inline-block';
+        };
+
+        const getLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        getWeatherData(position.coords.latitude, position.coords.longitude);
+                    },
+                    (error) => {
+                        locationEl.textContent = 'Location access denied.';
+                        recommendationTextEl.textContent = 'Please enable location services to get a gear forecast.';
+                        console.error(error);
+                    }
+                );
+            } else {
+                locationEl.textContent = 'Geolocation is not supported.';
+                recommendationTextEl.textContent = 'Sorry, your browser does not support the features needed for a forecast.';
+            }
+        };
+
+        getLocation();
+    };
+
+    forecastButton.addEventListener('click', () => {
+        widgetPrompt.style.display = 'none';
+        widgetCard.style.display = 'grid';
+        weatherWidget();
+    });
+
   </script>
 </body>
 </html>
