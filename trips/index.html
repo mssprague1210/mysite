@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <nav class="top-nav" aria-label="Primary">
     <div class="container">
       <a class="brand" href="/"><span class="name">Matthew Sprague</span></a>
@@ -21,20 +22,21 @@
         <a role="menuitem" class="active" href="/trips/">Trips</a>
         <a role="menuitem" href="/story/">DND Campaign</a>
       </div>
-      <button class="hamburger" aria-label="Open menu" aria-controls="mobile-panel" aria-expanded="false">
+      <button class="hamburger" aria-label="Menu" aria-controls="mobile-panel" aria-expanded="false">
         <span class="bars" aria-hidden="true"></span>
       </button>
     </div>
   </nav>
-    <div id="mobile-panel" class="mobile-panel" role="menu">
-      <a href="/" role="menuitem">Home</a>
-      <a href="/resume/" role="menuitem">Resume</a>
-      <a href="/hobbies/" role="menuitem">Hobbies</a>
-      <a href="/trips/" role="menuitem">Trips</a>
-      <a href="/story/" role="menuitem">DND Campaign</a>
-    </div>
 
-  <main class="container">
+  <nav id="mobile-panel" class="mobile-panel" aria-label="Mobile navigation">
+    <a href="/" role="menuitem">Home</a>
+    <a href="/resume/" role="menuitem">Resume</a>
+    <a href="/hobbies/" role="menuitem">Hobbies</a>
+    <a href="/trips/" role="menuitem">Trips</a>
+    <a href="/story/" role="menuitem">DND Campaign</a>
+  </nav>
+
+  <main id="main" class="container">
     <h1>Trips</h1>
     <p>Recent adventures and plans. Swap in photo grids, trail notes, GPX links, and packing lists.</p>
 
@@ -50,20 +52,53 @@
     </div>
   </main>
 
-  <footer class="container"><p>© <span id="year-t"></span> Matthew Sprague</p></footer>
-  <script>document.getElementById('year-t').textContent = new Date().getFullYear();
+  <footer class="container"><p>© <span id="year"></span> Matthew Sprague</p></footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
     const btn = document.querySelector('.hamburger');
     const panel = document.getElementById('mobile-panel');
+    const focusableElements = panel ? panel.querySelectorAll('a') : [];
+    const firstLink = focusableElements[0];
+    const lastLink = focusableElements[focusableElements.length - 1];
+
+    function openMenu() {
+      btn.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('mobile-open');
+      panel.addEventListener('keydown', trapFocus);
+      firstLink && firstLink.focus();
+    }
+    function closeMenu() {
+      btn.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('mobile-open');
+      panel.removeEventListener('keydown', trapFocus);
+      btn.focus();
+    }
+
+    function trapFocus(e) {
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === firstLink) {
+          e.preventDefault();
+          lastLink.focus();
+        }
+        else if (!e.shiftKey && document.activeElement === lastLink) {
+          e.preventDefault();
+          firstLink.focus();
+        }
+      }
+    }
+
     if (btn && panel) {
       btn.addEventListener('click', () => {
         const open = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!open));
-        document.body.classList.toggle('mobile-open', !open);
+        open ? closeMenu() : openMenu();
       });
       panel.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A') {
-          btn.setAttribute('aria-expanded', 'false');
-          document.body.classList.remove('mobile-open');
+        if (e.target.tagName === 'A') closeMenu();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+          closeMenu();
         }
       });
     }
