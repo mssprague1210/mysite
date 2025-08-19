@@ -9,7 +9,7 @@
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/assets/site.css?v=9" />
+  <link rel="stylesheet" href="/assets/site.css?v=10" />
 
   <!-- Perf: optional if you remove @import in CSS later -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,17 +77,17 @@
 
         <!-- Weather card, hidden by default -->
         <div id="widget-card" class="widget-card" style="display: none;">
-            <div class="weather-info">
+            <div id="weather-forecast-display" class="weather-forecast-display">
                 <div id="weather-icon"></div>
-                <div class="weather-details">
+                <div id="weather-details" class="weather-details">
                     <p id="weather-location">Fetching your location...</p>
                     <p id="weather-temp-desc"></p>
                     <p id="weather-timestamp"></p>
                 </div>
             </div>
-            <div class="recommendation">
-                <p id="recommendation-text">Finding the right gear for you...</p>
-                <a id="recommendation-link" href="#" class="button" target="_blank" rel="noopener noreferrer" style="display: none;">Check it out</a>
+            <p id="recommendation-text">Finding the right gear for you...</p>
+            <div id="recommendation-products" class="recommendation-products">
+                <!-- Product image and link will be injected here by JS -->
             </div>
         </div>
     </section>
@@ -157,20 +157,19 @@
         const tempDescEl = document.getElementById('weather-temp-desc');
         const timestampEl = document.getElementById('weather-timestamp');
         const recommendationTextEl = document.getElementById('recommendation-text');
-        const recommendationLinkEl = document.getElementById('recommendation-link');
+        const recommendationProductsEl = document.getElementById('recommendation-products');
 
         const recommendations = {
-            hot: { text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key. Take a look at some great hydration packs.", link: "https://www.rei.com/c/hydration-packs" },
-            rain: { text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets" },
-            cold: { text: "It's chilly! Layering up is the best way to stay warm on your adventures. Check out these versatile base layers.", link: "https://www.rei.com/c/mens-base-layer-tops" },
-            snow: { text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", link: "https://www.rei.com/c/mens-winter-boots" },
-            clear: { text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", link: "https://www.rei.com/c/sunglasses" },
-            default: { text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", link: "https://www.rei.com/" }
+            hot: { text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key.", product: { name: "Hydration Packs", link: "https://www.rei.com/c/hydration-packs", image: "hydration-pack.webp" }},
+            rain: { text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.", product: { name: "Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rain-jacket.webp" }},
+            cold: { text: "It's chilly! Layering up is the best way to stay warm on your adventures. Check out these versatile base layers.", product: { name: "Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer.webp" }},
+            snow: { text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", product: { name: "Winter Boots", link: "https://www.rei.com/c/mens-winter-boots", image: "winter-boots.webp" }},
+            clear: { text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", product: { name: "Sunglasses", link: "https://www.rei.com/c/sunglasses", image: "sunglasses.webp" }},
+            default: { text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", product: { name: "New Arrivals", link: "https://www.rei.com/c/new-arrivals", image: "new-arrivals.webp" }}
         };
 
         const getWeatherData = async (lat, lon) => {
             try {
-                // ✅ UPDATED: Call your new serverless function instead of the API directly
                 const response = await fetch(`/.netlify/functions/weather?lat=${lat}&lon=${lon}`);
                 if (!response.ok) throw new Error('Weather data not available.');
                 const data = await response.json();
@@ -187,7 +186,17 @@
             const iconCode = data.weather[0].icon;
             const weatherId = data.weather[0].id;
             const timestamp = new Date(data.dt * 1000);
+            const hour = timestamp.getHours();
             const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Set AM/PM class for icon background
+            if (hour >= 5 && hour < 18) { // 5 AM to 6 PM is considered "day"
+                weatherIconEl.classList.add('is-am');
+                weatherIconEl.classList.remove('is-pm');
+            } else {
+                weatherIconEl.classList.add('is-pm');
+                weatherIconEl.classList.remove('is-am');
+            }
 
             locationEl.textContent = `Your forecast in ${data.name}`;
             tempDescEl.textContent = `${temp}°F, ${description}`;
@@ -203,8 +212,14 @@
             else recommendation = recommendations.default;
             
             recommendationTextEl.textContent = recommendation.text;
-            recommendationLinkEl.href = recommendation.link;
-            recommendationLinkEl.style.display = 'inline-block';
+            
+            const product = recommendation.product;
+            recommendationProductsEl.innerHTML = `
+                <div class="product-item">
+                    <img src="/gear-forecast/${product.image}" alt="${product.name}" width="120" height="120">
+                    <a href="${product.link}" class="button" target="_blank" rel="noopener noreferrer">${product.name}</a>
+                </div>
+            `;
         };
 
         const getLocation = () => {
@@ -228,7 +243,7 @@
 
     forecastButton.addEventListener('click', () => {
         widgetPrompt.style.display = 'none';
-        widgetCard.style.display = 'grid';
+        widgetCard.style.display = 'flex';
         weatherWidget();
     });
 
