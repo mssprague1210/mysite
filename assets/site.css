@@ -169,6 +169,30 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
 .button.alt { background: transparent; color: var(--green); border-color: var(--gold-strong); }
 .button.alt:hover { color: var(--bg); background: var(--gold-strong); }
 
+/* Weather Widget Prompt */
+.widget-prompt {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(28,27,26,0.08);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.widget-prompt h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.widget-prompt p {
+  max-width: 50ch;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+}
+
+
 /* Footer */
 footer { padding: 3rem 0; color: var(--muted); font-size: .95rem; }
 
