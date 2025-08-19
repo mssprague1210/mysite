@@ -108,7 +108,7 @@ a:hover, a:focus { text-decoration: underline; }
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .mobile-panel a {
-  display: block; padding: .8rem 0;
+ padding: .8rem 0;
   color: var(--green); font-weight: 600;
   border-bottom: 1px solid rgba(28,27,26,0.06);
 }
