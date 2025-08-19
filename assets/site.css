@@ -202,32 +202,43 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
   background: #fff;
   border: 1px solid rgba(28,27,26,0.08);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 1.5rem;
 }
 
-.weather-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.weather-forecast-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 #weather-icon {
   display: grid;
   place-items: center;
-  background: rgba(0,0,0,0.03);
   border-radius: 50%;
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+#weather-icon.is-am {
+    background-color: #87CEEB; /* Sky Blue */
+}
+#weather-icon.is-pm {
+    background-color: #2c3e50; /* Midnight Blue */
 }
 
 #weather-icon img {
-  width: 60px;
-  height: 60px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  width: 70px;
+  height: 70px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
 }
 
 .weather-details p {
@@ -239,7 +250,7 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
   font-family: 'Ubuntu', sans-serif;
   font-weight: 700;
   color: var(--green);
-  font-size: 1.125rem;
+  font-size: 1.25rem;
 }
 
 #weather-temp-desc {
@@ -252,6 +263,34 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
   color: var(--muted);
   margin-top: 0.25rem;
 }
+
+#recommendation-text {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.recommendation-products {
+    margin-top: 1rem;
+}
+
+.product-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.product-item img {
+    border-radius: var(--radius);
+    background-color: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.05);
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
 
 .recommendation p {
   margin: 0 0 1rem;
