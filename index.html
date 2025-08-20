@@ -9,7 +9,7 @@
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/assets/site.css?v=10" />
+  <link rel="stylesheet" href="/assets/site.css?v=11" />
 
   <!-- Perf: optional if you remove @import in CSS later -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,7 +87,7 @@
             </div>
             <p id="recommendation-text">Finding the right gear for you...</p>
             <div id="recommendation-products" class="recommendation-products">
-                <!-- Product image and link will be injected here by JS -->
+                <!-- Product items will be injected here by JS -->
             </div>
         </div>
     </section>
@@ -160,12 +160,54 @@
         const recommendationProductsEl = document.getElementById('recommendation-products');
 
         const recommendations = {
-            hot: { text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key.", product: { name: "Hydration Packs", link: "https://www.rei.com/c/hydration-packs", image: "2654001000.webp" }},
-            rain: { text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.", product: { name: "Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }},
-            cold: { text: "It's chilly! Layering up is the best way to stay warm on your adventures. Check out these versatile base layers.", product: { name: "Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer.webp" }},
-            snow: { text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", product: { name: "Winter Boots", link: "https://www.rei.com/c/mens-winter-boots", image: "winter-boots.webp" }},
-            clear: { text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", product: { name: "Sunglasses", link: "https://www.rei.com/c/sunglasses", image: "sunglasses.webp" }},
-            default: { text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", product: { name: "New Arrivals", link: "https://www.rei.com/c/new-arrivals", image: "new-arrivals.webp" }}
+            hot: { 
+                text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key.", 
+                products: [
+                    { name: "Men's Hydration Vests", link: "https://www.rei.com/c/mens-hydration-vests", image: "2654001000.webp" },
+                    { name: "Women's Hydration Vests", link: "https://www.rei.com/c/womens-hydration-vests", image: "hydration-vest-women.webp" },
+                    { name: "Water Bottles", link: "https://www.rei.com/c/water-bottles", image: "water-bottle.webp" }
+                ]
+            },
+            rain: { 
+                text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.", 
+                products: [
+                    { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" },
+                    { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "rain-jacket-women.webp" },
+                    { name: "Pack Covers", link: "https://www.rei.com/c/pack-covers", image: "pack-cover.webp" }
+                ]
+            },
+            cold: { 
+                text: "It's chilly! Layering up is the best way to stay warm on your adventures.", 
+                products: [
+                    { name: "Men's Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer.webp" },
+                    { name: "Women's Base Layers", link: "https://www.rei.com/c/womens-base-layer-tops", image: "base-layer-women.webp" },
+                    { name: "Warm Hats", link: "https://www.rei.com/c/winter-hats", image: "hat.webp" }
+                ]
+            },
+            snow: { 
+                text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", 
+                products: [
+                    { name: "Men's Winter Boots", link: "https://www.rei.com/c/mens-winter-boots", image: "winter-boots.webp" },
+                    { name: "Women's Winter Boots", link: "https://www.rei.com/c/womens-winter-boots", image: "winter-boots-women.webp" },
+                    { name: "Gaiters", link: "https://www.rei.com/c/gaiters", image: "gaiters.webp" }
+                ]
+            },
+            clear: { 
+                text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", 
+                products: [
+                    { name: "Men's Sunglasses", link: "https://www.rei.com/c/mens-sunglasses", image: "sunglasses.webp" },
+                    { name: "Women's Sunglasses", link: "https://www.rei.com/c/womens-sunglasses", image: "sunglasses-women.webp" },
+                    { name: "Sunscreen", link: "https://www.rei.com/c/sunscreen", image: "sunscreen.webp" }
+                ]
+            },
+            default: { 
+                text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", 
+                products: [
+                    { name: "Men's New Arrivals", link: "https://www.rei.com/c/mens-new-arrivals", image: "new-arrivals.webp" },
+                    { name: "Women's New Arrivals", link: "https://www.rei.com/c/womens-new-arrivals", image: "new-arrivals-women.webp" },
+                    { name: "Camp Kitchen", link: "https://www.rei.com/c/camp-kitchen", image: "camp-kitchen.webp" }
+                ]
+            }
         };
 
         const getWeatherData = async (lat, lon) => {
@@ -189,8 +231,7 @@
             const hour = timestamp.getHours();
             const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // Set day/night class for icon background based on daylight hours
-            if (hour >= 6 && hour < 18) { // 6 AM to 6 PM is considered "day"
+            if (hour >= 6 && hour < 18) {
                 weatherIconEl.classList.add('is-day');
                 weatherIconEl.classList.remove('is-night');
             } else {
@@ -213,13 +254,12 @@
             
             recommendationTextEl.textContent = recommendation.text;
             
-            const product = recommendation.product;
-            recommendationProductsEl.innerHTML = `
+            recommendationProductsEl.innerHTML = recommendation.products.map(product => `
                 <div class="product-item">
                     <img src="/gearforecast/${product.image}" alt="${product.name}" width="120" height="120">
                     <a href="${product.link}" class="button" target="_blank" rel="noopener noreferrer">${product.name}</a>
                 </div>
-            `;
+            `).join('');
         };
 
         const getLocation = () => {
