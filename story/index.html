@@ -143,7 +143,7 @@
     .chapter-header span{ color:var(--muted); font-size:13px; }
 
     .chapter-text{
-      color:#e6e9f0; line-height:1.75; font-size:17px; white-space:pre-wrap;
+      color:#e6e9f0; line-height:1.75; font-size:17px;
       background:
         radial-gradient(1200px 500px at 0% 0%, rgba(184,74,74,.06) 0%, transparent 50%),
         linear-gradient(180deg, rgba(255,255,255,.02), transparent 70%);
@@ -209,12 +209,10 @@
       <nav class="top-links"><a href="/">Home</a></nav>
     </header>
 
-    <!-- Sidebar -->
     <aside class="sidebar" role="complementary">
       <div class="brand">
         <h2>Chapters</h2>
         <p>Tap to open an entry • Paginated</p>
-        <!-- Moved here -->
         <button id="allGalleryBtn" class="btn-invert" aria-pressed="false">All-Chapter Gallery</button>
       </div>
 
@@ -227,7 +225,6 @@
       </div>
     </aside>
 
-    <!-- Main content -->
     <main class="content" role="main" id="mainContent">
       <div class="chapter-header">
         <h2 id="chapterTitle">Chapter Title</h2>
@@ -247,7 +244,6 @@
     </main>
   </div>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Image viewer">
     <button class="lb-close" id="lbClose" aria-label="Close">Close ✕</button>
     <button class="lb-prev" id="lbPrev" aria-label="Previous">◀</button>
@@ -260,23 +256,27 @@
 
   <script>
     /* ---------- CONTENT ---------- */
-const STORY = {
-  title: "Curse of Strahd — The Story So Far",
-  chapters: [
-    { id:"intro", title:"Introduction", date:"2025-07-17",
-      file:"chapters/intro.html", // <-- Changed from text to file
-      images:[ {src:"images/hoberm.webp",alt:"Hoberm",cap:"Halfling druid"}, {src:"images/gadwick.webp",alt:"Gadwick",cap:"Court mage"} ] },
-    { id:"arrival", title:"Arrival in Barovia", date:"2025-01-17",
-      file:"chapters/arrival.html", // <-- Add this for all chapters
-      images:[ {src:"images/arrival.webp",alt:"Road to Barovia",cap:"The road"}, {src:"images/letter.webp",alt:"Letter",cap:"The letter"} ] },
-    { id:"village", title:"The Village and the Doll", date:"2025-02-02",
-      file:"chapters/village.html",
-      images:[ {src:"images/village-1.webp",alt:"Candlelit room",cap:"Resolve"}, {src:"images/doll.webp",alt:"The doll",cap:"Clue"} ] }
-    // add more chapters freely
-  ]
-};
+    const STORY = {
+      title: "Curse of Strahd — The Story So Far",
+      chapters: [
+        { id: "intro", title: "Introduction", date: "2025-07-17", file: "chapters/intro.html" },
+        { id: "arrival", title: "Arrival in Barovia", date: "2025-01-17", file: "chapters/arrival.html" },
+        { id: "village", title: "The Village and the Doll", date: "2025-02-02", file: "chapters/village.html" }
+      ]
+    };
 
-    /* ---------- SETTINGS (responsive pagination) ---------- */
+    // Master list of all image files
+    const ALL_IMAGE_FILES = [
+      "intro--hoberm-the-halfling-druid.webp",
+      "intro--gadwick-the-court-mage.webp",
+      "arrival--the-road-to-barovia.webp",
+      "arrival--strahds-letter.webp",
+      "village--a-candlelit-resolve.webp",
+      "village--the-creepy-doll.webp",
+      // Add new image filenames here in the format: "chapter-id--description.webp"
+    ];
+
+    /* ---------- SETTINGS ---------- */
     const MOBILE_MEDIA = window.matchMedia('(max-width: 880px)');
     const MOBILE_PER_PAGE = 5;
     const DESKTOP_PER_PAGE = 10;
@@ -287,97 +287,100 @@ const STORY = {
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
     const chapterTitle = document.getElementById('chapterTitle');
-    const chapterMeta  = document.getElementById('chapterMeta');
-    const chapterText  = document.getElementById('chapterText');
-    const gallery      = document.getElementById('gallery');
-    const albumLinks   = document.getElementById('albumLinks');
-    const mainContent  = document.getElementById('mainContent');
+    const chapterMeta = document.getElementById('chapterMeta');
+    const chapterText = document.getElementById('chapterText');
+    const gallery = document.getElementById('gallery');
+    const albumLinks = document.getElementById('albumLinks');
+    const mainContent = document.getElementById('mainContent');
     const toggleGallery = document.getElementById('toggleGallery');
     const toggleMobileGallery = document.getElementById('toggleMobileGallery');
     const allGalleryBtn = document.getElementById('allGalleryBtn');
     const allGallerySec = document.getElementById('allGallery');
-
     let currentPage = 0;
 
-    function renderChapterList(){
+    function renderChapterList() {
       const start = currentPage * CHAPTERS_PER_PAGE;
-      const end   = Math.min(start + CHAPTERS_PER_PAGE, STORY.chapters.length);
+      const end = Math.min(start + CHAPTERS_PER_PAGE, STORY.chapters.length);
       chapterList.innerHTML = '';
-
       STORY.chapters.slice(start, end).forEach((c, i) => {
         const li = document.createElement('li');
         const btn = document.createElement('button');
         btn.textContent = c.title;
-        btn.setAttribute('role','tab');
+        btn.setAttribute('role', 'tab');
         btn.setAttribute('aria-controls', `panel-${c.id}`);
         btn.addEventListener('click', () => { showAllGallery(false); loadChapter(start + i); });
-        li.appendChild(btn); chapterList.appendChild(li);
+        li.appendChild(btn);
+        chapterList.appendChild(li);
       });
-
       prevPageBtn.disabled = currentPage === 0;
       nextPageBtn.disabled = end >= STORY.chapters.length;
     }
 
-    prevPageBtn.addEventListener('click', () => { if(currentPage>0){ currentPage--; renderChapterList(); } });
+    prevPageBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; renderChapterList(); } });
     nextPageBtn.addEventListener('click', () => {
-      const maxPage = Math.floor((STORY.chapters.length-1)/CHAPTERS_PER_PAGE);
-      if(currentPage < maxPage){ currentPage++; renderChapterList(); }
+      const maxPage = Math.floor((STORY.chapters.length - 1) / CHAPTERS_PER_PAGE);
+      if (currentPage < maxPage) { currentPage++; renderChapterList(); }
     });
 
-    /* Recalculate per-page on viewport change, keep the current chapter visible */
     MOBILE_MEDIA.addEventListener('change', () => {
-      const oldPerPage = CHAPTERS_PER_PAGE;
       CHAPTERS_PER_PAGE = MOBILE_MEDIA.matches ? MOBILE_PER_PAGE : DESKTOP_PER_PAGE;
-      const activeId = location.hash.replace('#','');
+      const activeId = location.hash.replace('#', '');
       const idx = STORY.chapters.findIndex(c => c.id === activeId);
       currentPage = idx >= 0 ? Math.floor(idx / CHAPTERS_PER_PAGE) : 0;
       renderChapterList();
-      if(idx >= 0) loadChapter(idx);
+      if (idx >= 0) loadChapter(idx);
     });
 
-  async function loadChapter(index) {
-  const c = STORY.chapters[index];
-
-  // Update chapter list UI
-  const start = currentPage * CHAPTERS_PER_PAGE;
-  [...chapterList.querySelectorAll('button')].forEach((b, i) => {
-    b.setAttribute('aria-current', start + i === index ? 'true' : 'false');
-  });
-
-  // Update header UI
-  chapterTitle.textContent = c.title;
-  chapterMeta.textContent = c.date ? new Date(c.date).toLocaleDateString() : '';
-  
-  // --- NEW FETCH LOGIC ---
-  chapterText.innerHTML = '<p>Loading...</p>';
-
-  try {
-    const response = await fetch(c.file);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // Helper function to turn "gadwick-is-sad" into "Gadwick is sad"
+    function formatFilenameAsCaption(filename) {
+      const caption = filename.replace(/-/g, ' ');
+      return caption.charAt(0).toUpperCase() + caption.slice(1);
     }
-    const htmlContent = await response.text();
-    chapterText.innerHTML = htmlContent;
-  } catch (error) {
-    console.error("Could not fetch chapter content:", error);
-    chapterText.innerHTML = `<p style="color:var(--accent);">Error: Could not load chapter content.</p>`;
-  }
-      albumLinks.innerHTML = '';
 
-      gallery.innerHTML = '';
-      (c.images||[]).forEach((img, i) => {
-        const card = document.createElement('figure'); card.className = 'card';
-        const im = document.createElement('img'); im.loading = 'lazy';
-        im.src = img.src; im.alt = img.alt || '';
-        im.addEventListener('click', () => openLightbox(c.images, i));
-        const cap = document.createElement('figcaption'); cap.className='cap'; cap.textContent = img.cap || '';
-        card.appendChild(im); card.appendChild(cap); gallery.appendChild(card);
+    async function loadChapter(index) {
+      const c = STORY.chapters[index];
+      const start = currentPage * CHAPTERS_PER_PAGE;
+      [...chapterList.querySelectorAll('button')].forEach((b, i) => {
+        b.setAttribute('aria-current', start + i === index ? 'true' : 'false');
       });
-
+      chapterTitle.textContent = c.title;
+      chapterMeta.textContent = c.date ? new Date(c.date).toLocaleDateString() : '';
+      chapterText.innerHTML = '<p>Loading...</p>';
+      try {
+        const response = await fetch(c.file);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const htmlContent = await response.text();
+        chapterText.innerHTML = htmlContent;
+      } catch (error) {
+        console.error("Could not fetch chapter content:", error);
+        chapterText.innerHTML = `<p style="color:var(--accent);">Error: Could not load chapter content.</p>`;
+      }
+      albumLinks.innerHTML = '';
+      gallery.innerHTML = '';
+      const chapterImageFiles = ALL_IMAGE_FILES.filter(file => file.startsWith(c.id + '--'));
+      const chapterImages = chapterImageFiles.map(filename => {
+        const namePart = filename.split('--')[1].split('.')[0];
+        const caption = formatFilenameAsCaption(namePart);
+        return { src: `images/${filename}`, alt: caption, cap: caption };
+      });
+      chapterImages.forEach((img, i) => {
+        const card = document.createElement('figure');
+        card.className = 'card';
+        const im = document.createElement('img');
+        im.loading = 'lazy';
+        im.src = img.src;
+        im.alt = img.alt;
+        im.addEventListener('click', () => openLightbox(chapterImages, i));
+        const cap = document.createElement('figcaption');
+        cap.className = 'cap';
+        cap.textContent = img.cap;
+        card.appendChild(im);
+        card.appendChild(cap);
+        gallery.appendChild(card);
+      });
       history.replaceState(null, '', `#${c.id}`);
     }
 
-    /* Per-chapter gallery mode */
     toggleGallery.addEventListener('click', () => {
       showAllGallery(false);
       const on = !mainContent.classList.contains('gallery-only');
@@ -386,50 +389,63 @@ const STORY = {
       toggleGallery.textContent = on ? 'Story Mode' : 'Gallery Mode';
     });
 
-    /* Mobile: show/hide this chapter's gallery */
     toggleMobileGallery.addEventListener('click', () => {
       const shown = gallery.classList.toggle('show');
       toggleMobileGallery.setAttribute('aria-pressed', String(shown));
       toggleMobileGallery.textContent = shown ? 'Hide Gallery (Mobile)' : 'Show Gallery (Mobile)';
     });
 
-    /* All-chapter gallery */
-    function buildAllGallery(){
+    function buildAllGallery() {
       allGallerySec.innerHTML = '';
       STORY.chapters.forEach((chapter) => {
-        if(!chapter.images || chapter.images.length === 0) return;
-        const h = document.createElement('h3'); h.textContent = chapter.title; allGallerySec.appendChild(h);
-        const grid = document.createElement('div'); grid.className = 'chapter-grid';
-        chapter.images.forEach((img, i) => {
-          const fig = document.createElement('figure'); fig.className = 'thumb';
-          const im = document.createElement('img'); im.loading = 'lazy'; im.src = img.src; im.alt = img.alt || '';
-          im.addEventListener('click', () => openLightbox(chapter.images, i));
-          fig.appendChild(im); grid.appendChild(fig);
+        const chapterImageFiles = ALL_IMAGE_FILES.filter(file => file.startsWith(chapter.id + '--'));
+        if (chapterImageFiles.length === 0) return;
+
+        const h = document.createElement('h3');
+        h.textContent = chapter.title;
+        allGallerySec.appendChild(h);
+
+        const grid = document.createElement('div');
+        grid.className = 'chapter-grid';
+        
+        const chapterImages = chapterImageFiles.map(filename => {
+            const namePart = filename.split('--')[1].split('.')[0];
+            const caption = formatFilenameAsCaption(namePart);
+            return { src: `images/${filename}`, alt: caption, cap: caption };
+        });
+
+        chapterImages.forEach((img, i) => {
+          const fig = document.createElement('figure');
+          fig.className = 'thumb';
+          const im = document.createElement('img');
+          im.loading = 'lazy';
+          im.src = img.src;
+          im.alt = img.alt;
+          im.addEventListener('click', () => openLightbox(chapterImages, i));
+          fig.appendChild(im);
+          grid.appendChild(fig);
         });
         allGallerySec.appendChild(grid);
       });
     }
 
-    function showAllGallery(on){
+    function showAllGallery(on) {
       const pressed = allGalleryBtn.getAttribute('aria-pressed') === 'true';
       const wantOn = (typeof on === 'boolean') ? on : !pressed;
       allGalleryBtn.setAttribute('aria-pressed', String(wantOn));
       allGalleryBtn.textContent = wantOn ? 'Back to Story' : 'All-Chapter Gallery';
-
       const storyBits = [document.querySelector('.chapter-header'), chapterText, albumLinks, document.querySelector('.toolbar'), gallery];
-      storyBits.forEach(el => { if(el) el.style.display = wantOn ? 'none' : ''; });
-
-      if(wantOn){
-        if(mainContent.classList.contains('gallery-only')){
+      storyBits.forEach(el => { if (el) el.style.display = wantOn ? 'none' : ''; });
+      if (wantOn) {
+        if (mainContent.classList.contains('gallery-only')) {
           mainContent.classList.remove('gallery-only');
-          toggleGallery.setAttribute('aria-pressed','false');
+          toggleGallery.setAttribute('aria-pressed', 'false');
           toggleGallery.textContent = 'Gallery Mode';
         }
         buildAllGallery();
         allGallerySec.classList.add('show');
-        // ensure you’re at the top of content on mobile
-        mainContent.scrollIntoView({behavior:'smooth', block:'start'});
-      }else{
+        mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
         allGallerySec.classList.remove('show');
       }
     }
@@ -442,27 +458,37 @@ const STORY = {
     const lbClose = document.getElementById('lbClose');
     const lbPrev = document.getElementById('lbPrev');
     const lbNext = document.getElementById('lbNext');
-    let lbSet = []; let lbIndex = 0;
-    function openLightbox(set, i){ lbSet = set; lbIndex = i; updateLB(); lb.classList.add('open'); }
-    function updateLB(){ const it = lbSet[lbIndex]; lbImg.src = it.src; lbCap.textContent = it.cap || it.alt || ''; }
-    function closeLB(){ lb.classList.remove('open'); }
-    function prevLB(){ lbIndex = (lbIndex - 1 + lbSet.length) % lbSet.length; updateLB(); }
-    function nextLB(){ lbIndex = (lbIndex + 1) % lbSet.length; updateLB(); }
+    let lbSet = [];
+    let lbIndex = 0;
+    function openLightbox(set, i) { lbSet = set; lbIndex = i; updateLB(); lb.classList.add('open'); }
+    function updateLB() { const it = lbSet[lbIndex]; lbImg.src = it.src; lbCap.textContent = it.cap || it.alt || ''; }
+    function closeLB() { lb.classList.remove('open'); }
+    function prevLB() { lbIndex = (lbIndex - 1 + lbSet.length) % lbSet.length; updateLB(); }
+    function nextLB() { lbIndex = (lbIndex + 1) % lbSet.length; updateLB(); }
     lbClose.addEventListener('click', closeLB);
     lbPrev.addEventListener('click', prevLB);
     lbNext.addEventListener('click', nextLB);
-    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
-    window.addEventListener('keydown', (e)=>{ if(!lb.classList.contains('open')) return;
-      if(e.key==='Escape') closeLB(); if(e.key==='ArrowLeft') prevLB(); if(e.key==='ArrowRight') nextLB(); });
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
+    window.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLB();
+      if (e.key === 'ArrowLeft') prevLB();
+      if (e.key === 'ArrowRight') nextLB();
+    });
 
     /* Init */
-    function init(){
+    function init() {
       document.title = STORY.title || document.title;
       renderChapterList();
-      const id = location.hash.replace('#','');
+      const id = location.hash.replace('#', '');
       const idx = STORY.chapters.findIndex(c => c.id === id);
-      if(idx >= 0){ currentPage = Math.floor(idx / CHAPTERS_PER_PAGE); renderChapterList(); loadChapter(idx); }
-      else { loadChapter(0); }
+      if (idx >= 0) {
+        currentPage = Math.floor(idx / CHAPTERS_PER_PAGE);
+        renderChapterList();
+        loadChapter(idx);
+      } else {
+        loadChapter(0);
+      }
     }
     init();
   </script>
