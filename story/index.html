@@ -260,30 +260,21 @@
 
   <script>
     /* ---------- CONTENT ---------- */
-    const STORY = {
-      title: "Curse of Strahd — The Story So Far",
-      chapters: [
-        { id:"intro", title:"Introduction", date:"2025-07-17",
-          text:`<p>The story begins as our heroes of Eldemere wake to a summons from the Duchess, calling them to the main hall. This was unusual. After all, the hall had fallen into disrepair since the Duke’s death. His loss had left the duchy in a precarious state: trade faltered, old alliances grew distant, and while the Duchess worked tirelessly to hold things together, her efforts were met with mounting difficulty. With cost-cutting curbing feasts and visitors growing scarce, the use of the main hall could only mean news of great importance.</p>
-
-		<p>A mysterious visitor awaited them. Aragol, a traveler from a distant land called Barovia, had come bearing both news and a dire request. Irina, the daughter of Barovia’s burgomaster, had taken ill under strange and troubling circumstances. Aragol claimed the burgomaster ruled a rich land—one he would gladly open to trade, with generous terms, should his daughter’s saviors succeed. For Eldemere, desperate for renewed prosperity, the opportunity was too great to ignore.</p>
-
-		<p>And Aragol himself seemed earnest, his plea directed toward heroes well-suited for such a task: a devout cleric, a noble paladin, a gifted druid, and a wizard of...well a wizard. Each blessed by Lathander, the Morninglord, and armed with magic enough to face the unknown.</p>
-
-		<p>Without hesitation, the party accepted Aragol’s request and set out upon the road to Barovia.</p>
-
-		Thus begins our tale chronicled through the eyes and journal of the cleric, Ket.`,
-		 
-          images:[ {src:"images/hoberm.webp",alt:"Hoberm",cap:"Halfling druid"}, {src:"images/gadwick.webp",alt:"Gadwick",cap:"Court mage"} ] },
-        { id:"arrival", title:"Arrival in Barovia", date:"2025-01-17",
-          text:`Fog like wet wool. A letter that shouldn't exist...`,
-          images:[ {src:"images/arrival.webp",alt:"Road to Barovia",cap:"The road"}, {src:"images/letter.webp",alt:"Letter",cap:"The letter"} ] },
-        { id:"village", title:"The Village and the Doll", date:"2025-02-02",
-          text:`Hoberm tried to cheer a grieving mother with an opossum...`,
-          images:[ {src:"images/village-1.webp",alt:"Candlelit room",cap:"Resolve"}, {src:"images/doll.webp",alt:"The doll",cap:"Clue"} ] }
-        // add more chapters freely
-      ]
-    };
+const STORY = {
+  title: "Curse of Strahd — The Story So Far",
+  chapters: [
+    { id:"intro", title:"Introduction", date:"2025-07-17",
+      file:"chapters/intro.html", // <-- Changed from text to file
+      images:[ {src:"images/hoberm.webp",alt:"Hoberm",cap:"Halfling druid"}, {src:"images/gadwick.webp",alt:"Gadwick",cap:"Court mage"} ] },
+    { id:"arrival", title:"Arrival in Barovia", date:"2025-01-17",
+      file:"chapters/arrival.html", // <-- Add this for all chapters
+      images:[ {src:"images/arrival.webp",alt:"Road to Barovia",cap:"The road"}, {src:"images/letter.webp",alt:"Letter",cap:"The letter"} ] },
+    { id:"village", title:"The Village and the Doll", date:"2025-02-02",
+      file:"chapters/village.html",
+      images:[ {src:"images/village-1.webp",alt:"Candlelit room",cap:"Resolve"}, {src:"images/doll.webp",alt:"The doll",cap:"Clue"} ] }
+    // add more chapters freely
+  ]
+};
 
     /* ---------- SETTINGS (responsive pagination) ---------- */
     const MOBILE_MEDIA = window.matchMedia('(max-width: 880px)');
@@ -344,18 +335,33 @@
       if(idx >= 0) loadChapter(idx);
     });
 
-    function loadChapter(index){
-      const c = STORY.chapters[index];
+  async function loadChapter(index) {
+  const c = STORY.chapters[index];
 
-      const start = currentPage * CHAPTERS_PER_PAGE;
-      [...chapterList.querySelectorAll('button')].forEach((b,i)=>{
-        b.setAttribute('aria-current', start + i === index ? 'true' : 'false');
-      });
+  // Update chapter list UI
+  const start = currentPage * CHAPTERS_PER_PAGE;
+  [...chapterList.querySelectorAll('button')].forEach((b, i) => {
+    b.setAttribute('aria-current', start + i === index ? 'true' : 'false');
+  });
 
-      chapterTitle.textContent = c.title;
-      chapterMeta.textContent = c.date ? new Date(c.date).toLocaleDateString() : '';
-      chapterText.innerHTML = renderMarkdown(c.text || '');
+  // Update header UI
+  chapterTitle.textContent = c.title;
+  chapterMeta.textContent = c.date ? new Date(c.date).toLocaleDateString() : '';
+  
+  // --- NEW FETCH LOGIC ---
+  chapterText.innerHTML = '<p>Loading...</p>';
 
+  try {
+    const response = await fetch(c.file);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const htmlContent = await response.text();
+    chapterText.innerHTML = htmlContent;
+  } catch (error) {
+    console.error("Could not fetch chapter content:", error);
+    chapterText.innerHTML = `<p style="color:var(--accent);">Error: Could not load chapter content.</p>`;
+  }
       albumLinks.innerHTML = '';
 
       gallery.innerHTML = '';
@@ -369,19 +375,6 @@
       });
 
       history.replaceState(null, '', `#${c.id}`);
-    }
-
-    function renderMarkdown(md){
-      return md
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-        .replace(/^###\s?(.*)$/gm, '<strong style="font-size:18px;font-family:Cinzel,serif">$1</strong>')
-        .replace(/^##\s?(.*)$/gm, '<strong style="font-size:20px;font-family:Cinzel,serif">$1</strong>')
-        .replace(/^#\s?(.*)$/gm, '<strong style="font-size:22px;font-family:Cinzel,serif">$1</strong>')
-        .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-        .replace(/\*([^*]+)\*/g,'<em>$1</em>')
-        .replace(/`([^`]+)`/g,'<code style="background:#0b1120;padding:2px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.08)">$1</code>')
-        .replace(/\n\n/g,'</p><p>').replace(/^/,'<p>').concat('</p>')
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
     }
 
     /* Per-chapter gallery mode */
