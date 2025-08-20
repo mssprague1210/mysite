@@ -271,12 +271,13 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
   line-height: 1.6;
 }
 
+/* Mobile-first: Products stack vertically */
 .recommendation-products {
     margin-top: 1rem;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
+    flex-direction: column; /* Stack items vertically on mobile */
+    align-items: center;
+    gap: 2rem; /* Increase gap for vertical spacing */
     width: 100%;
 }
 
@@ -284,9 +285,7 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    flex-basis: 150px; /* Provides a base width for items */
-    flex-grow: 1;
+    gap: 1rem; /* 16px space between image and button (meets >15px req) */
 }
 
 .product-item img {
@@ -300,9 +299,25 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
 
 .product-item .button {
     width: 100%;
-    max-width: 150px; /* Ensure button doesn't get too wide */
+    max-width: 150px;
     text-align: center;
 }
+
+/* Desktop layout: Products side-by-side */
+@media (min-width: 720px) {
+    .recommendation-products {
+        flex-direction: row; /* Switch to horizontal layout */
+        justify-content: center;
+        align-items: flex-start; /* Align tops of items */
+        gap: 1.5rem; /* 24px space between items (meets >15px req) */
+    }
+
+    .product-item {
+        flex-basis: 150px;
+        flex-grow: 1;
+    }
+}
+
 
 .recommendation p {
   margin: 0 0 1rem;
