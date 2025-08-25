@@ -63,7 +63,7 @@
             <p>Below is a small tech demo I built to showcase this approach. Give it a try!</p>
         </div>
         <div class="intro-photo">
-            <!-- Placeholder for your 300x400 photo -->
+            <!-- Your photo -->
             <img src="/assets/images/matt.webp" alt="A photo of Matthew Sprague">
         </div>
     </header>
@@ -177,6 +177,9 @@
             cold: { text: "It's chilly! Layering up is the best way to stay warm on your adventures.", products: [ { name: "Men's Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer.webp" }, { name: "Women's Base Layers", link: "https://www.rei.com/c/womens-base-layer-tops", image: "base-layer-women.webp" }, { name: "Warm Hats", link: "https://www.rei.com/c/winter-hats", image: "hat.webp" } ]},
             snow: { text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", products: [ { name: "Men's Winter Boots", link: "https://www.rei.com/c/mens-winter-boots", image: "winter-boots.webp" }, { name: "Women's Winter Boots", link: "https://www.rei.com/c/womens-winter-boots", image: "winter-boots-women.webp" }, { name: "Gaiters", link: "https://www.rei.com/c/gaiters", image: "gaiters.webp" } ]},
             clear: { text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", products: [ { name: "Men's Sunglasses", link: "https://www.mauijim.com/US/en_US/shop/sunglasses/men", image: "mauijimmen.webp" }, { name: "Women's Sunglasses", link: "https://www.mauijim.com/US/en_US/shop/sunglasses/women", image: "mauijimwomen.webp" }, { name: "Sunscreen", link: "https://www.sunbum.com/products/daily-50-body-lotion", image: "sunbum.webp" } ]},
+            mild: { text: "It looks like ideal camping, running, or biking weather! Check out these great deals.", products: [ { name: "Running Shoes", link: "https://www.rei.com/c/running-shoes", image: "running-shoes.webp" }, { name: "Tents", link: "https://www.rei.com/c/tents", image: "tent.webp" }, { name: "Day Packs", link: "https://www.rei.com/c/day-packs", image: "day-pack.webp" } ]},
+            overcast: { text: "It's not raining yet, but now is the perfect time to prepare.", products: [ { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }, { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "rain-jacket-women.webp" }, { name: "Pack Covers", link: "https://www.rei.com/c/pack-covers", image: "pack-cover.webp" } ]},
+            misty: { text: "It's a little wet out there, hopefully it clears up soon. In the meantime, stay dry with these great picks.", products: [ { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }, { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "rain-jacket-women.webp" }, { name: "Waterproof Shoes", link: "https://www.rei.com/c/waterproof-hiking-boots", image: "waterproof-shoes.webp" } ]},
             default: { text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", products: [ { name: "Men's New Arrivals", link: "https://www.rei.com/c/mens-new-arrivals", image: "new-arrivals.webp" }, { name: "Women's New Arrivals", link: "https://www.rei.com/c/womens-new-arrivals", image: "new-arrivals-women.webp" }, { name: "Camp Kitchen", link: "https://www.rei.com/c/camp-kitchen", image: "camp-kitchen.webp" } ]}
         };
 
@@ -196,7 +199,7 @@
             const temp = Math.round(data.main.temp);
             const description = data.weather[0].description;
             const iconCode = data.weather[0].icon;
-            const weatherId = data.weather[0].id;
+            const weatherId = data.weather[0].id; // The numeric ID for the weather condition
             const timestamp = new Date(data.dt * 1000);
             const hour = timestamp.getHours();
             const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -215,12 +218,14 @@
             weatherIconEl.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}@2x.png" alt="${description}">`;
 
             let recommendation;
-            if (temp > 85) recommendation = recommendations.hot;
-            else if (weatherId >= 200 && weatherId < 600) recommendation = recommendations.rain;
-            else if (weatherId >= 600 && weatherId < 700) recommendation = recommendations.snow;
-            else if (temp < 40) recommendation = recommendations.cold;
-            else if (weatherId === 800) recommendation = recommendations.clear;
-            else recommendation = recommendations.default;
+            if (temp >= 80) recommendation = recommendations.hot;
+            else if (temp <= 49) recommendation = recommendations.cold;
+            else if (weatherId >= 200 && weatherId < 600) recommendation = recommendations.rain; // Rain, Drizzle, Thunderstorm
+            else if (weatherId >= 600 && weatherId < 700) recommendation = recommendations.snow; // Snow
+            else if (weatherId === 804) recommendation = recommendations.overcast; // Overcast clouds
+            else if (weatherId >= 701 && weatherId <= 781) recommendation = recommendations.misty; // Mist, Haze, Fog, etc.
+            else if (temp >= 50 && temp <= 79) recommendation = recommendations.mild; // Catches clear, few/scattered clouds in this temp range
+            else recommendation = recommendations.default; // Fallback for any other case
             
             recommendationTextEl.textContent = recommendation.text;
             
