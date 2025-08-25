@@ -341,6 +341,61 @@ header.hero { padding: 5rem 0 3rem; position: relative; z-index: 1; }
   }
 }
 
+/* Personal Intro Section */
+.personal-intro {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    display: flex;
+    flex-direction: column; /* Mobile-first: stack photo on top */
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+}
+
+.intro-photo img {
+    width: 210px; /* Scaled down for mobile */
+    height: 280px;
+    border-radius: var(--radius); /* Rounded rectangle */
+    object-fit: cover;
+    border: 4px solid var(--bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.intro-text h1 {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.intro-text p {
+    max-width: 60ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Desktop layout for intro */
+@media (min-width: 720px) {
+    .personal-intro {
+        flex-direction: row; /* Side-by-side on desktop */
+        text-align: left;
+        align-items: center; /* Vertically align text and image */
+        gap: 3rem;
+    }
+
+    .intro-photo {
+        flex-shrink: 0;
+    }
+
+    .intro-photo img {
+        width: 300px; /* Full size on desktop */
+        height: 400px;
+    }
+
+    .intro-text p {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
 
 
 /* Footer */
