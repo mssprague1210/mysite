@@ -9,7 +9,7 @@
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/assets/site.css?v=11" />
+  <link rel="stylesheet" href="/assets/site.css?v=13" />
 
   <!-- Perf: optional if you remove @import in CSS later -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,16 +54,18 @@
   </nav>
 
   <main id="main">
-    <header id="home" class="hero">
-      <div class="container">
-        <div class="eyebrow">Digital Platforms • UX • Outdoors</div>
-        <h1>Hi, I’m Matthew — I design and lead digital experiences that feel simple and human.</h1>
-        <p>I’m a digital platforms strategist with a love for user-centered design and data-informed experimentation. This space will expand with recent projects, writing, and ways I bring an outdoor mindset to digital work.</p>
-        <div class="cta-row">
-          <a class="button" href="/resume/">View Resume</a>
-          <a class="button alt" href="/hobbies/">See Hobbies</a>
+    <!-- New Personal Intro Section -->
+    <header id="home" class="personal-intro container">
+        <div class="intro-text">
+            <div class="eyebrow">Product Marketing • Go-To-Market Strategy</div>
+            <h1>Hi, I’m Matthew.</h1>
+            <p>I’m a digital marketing leader with a passion for building data-driven strategies that connect with users. With a background in leading high-impact experimentation and personalization at Verizon, I specialize in transforming business goals into simple, human-centered digital experiences.</p>
+            <p>Below is a small tech demo I built to showcase this approach. Give it a try!</p>
         </div>
-      </div>
+        <div class="intro-photo">
+            <!-- Placeholder for your 300x400 photo -->
+            <img src="https://placehold.co/300x400/234F2E/F9F9F7?text=MS" alt="A photo of Matthew Sprague">
+        </div>
     </header>
 
     <!-- Weather Widget Section -->
@@ -89,6 +91,16 @@
             <div id="recommendation-products" class="recommendation-products">
                 <!-- Product items will be injected here by JS -->
             </div>
+        </div>
+    </section>
+
+    <!-- "About This Feature" Section -->
+    <section class="about-feature container">
+        <h2>About This Feature</h2>
+        <p>This "Gear Forecaster" is a proof-of-concept for personalized e-commerce. It uses the OpenWeatherMap API via a secure serverless function to fetch a visitor's local weather. Based on the conditions, it dynamically suggests relevant product categories, demonstrating a practical way to increase user engagement and conversion.</p>
+        <p>It's a small example of how I approach digital strategy: blending data, user context, and business goals to create a valuable experience. If you like what you see, I'd love for you to learn more about my work.</p>
+        <div class="cta-row">
+          <a class="button" href="/resume/">View My Resume</a>
         </div>
     </section>
 
@@ -160,54 +172,12 @@
         const recommendationProductsEl = document.getElementById('recommendation-products');
 
         const recommendations = {
-            hot: { 
-                text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key.", 
-                products: [
-                    { name: "Men's Hydration Vests", link: "https://www.rei.com/c/mens-hydration-vests", image: "2654001000.webp" },
-                    { name: "Women's Hydration Vests", link: "https://www.rei.com/c/womens-hydration-vests", image: "hydration-vest-women.webp" },
-                    { name: "Water Bottles", link: "https://www.rei.com/c/water-bottles", image: "water-bottle.webp" }
-                ]
-            },
-            rain: { 
-                text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.", 
-                products: [
-                    { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" },
-                    { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "rain-jacket-women.webp" },
-                    { name: "Pack Covers", link: "https://www.rei.com/c/pack-covers", image: "pack-cover.webp" }
-                ]
-            },
-            cold: { 
-                text: "It's chilly! Layering up is the best way to stay warm on your adventures.", 
-                products: [
-                    { name: "Men's Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer.webp" },
-                    { name: "Women's Base Layers", link: "https://www.rei.com/c/womens-base-layer-tops", image: "base-layer-women.webp" },
-                    { name: "Warm Hats", link: "https://www.rei.com/c/winter-hats", image: "hat.webp" }
-                ]
-            },
-            snow: { 
-                text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", 
-                products: [
-                    { name: "Men's Winter Boots", link: "https://www.rei.com/c/mens-winter-boots", image: "winter-boots.webp" },
-                    { name: "Women's Winter Boots", link: "https://www.rei.com/c/womens-winter-boots", image: "winter-boots-women.webp" },
-                    { name: "Gaiters", link: "https://www.rei.com/c/gaiters", image: "gaiters.webp" }
-                ]
-            },
-            clear: { 
-                text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", 
-                products: [
-                    { name: "Men's Sunglasses", link: "https://www.rei.com/c/mens-sunglasses", image: "sunglasses.webp" },
-                    { name: "Women's Sunglasses", link: "https://www.rei.com/c/womens-sunglasses", image: "sunglasses-women.webp" },
-                    { name: "Sunscreen", link: "https://www.rei.com/c/sunscreen", image: "sunscreen.webp" }
-                ]
-            },
-            default: { 
-                text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", 
-                products: [
-                    { name: "Men's New Arrivals", link: "https://www.rei.com/c/mens-new-arrivals", image: "new-arrivals.webp" },
-                    { name: "Women's New Arrivals", link: "https://www.rei.com/c/womens-new-arrivals", image: "new-arrivals-women.webp" },
-                    { name: "Camp Kitchen", link: "https://www.rei.com/c/camp-kitchen", image: "camp-kitchen.webp" }
-                ]
-            }
+            hot: { text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key.", products: [ { name: "Men's Hydration Vests", link: "https://www.rei.com/c/mens-hydration-vests", image: "2654001000.webp" }, { name: "Women's Hydration Vests", link: "https://www.rei.com/c/womens-hydration-vests", image: "hydration-vest-women.webp" }, { name: "Water Bottles", link: "https://www.rei.com/c/water-bottles", image: "water-bottle.webp" } ]},
+            rain: { text: "Don't let the rain stop you! A good waterproof jacket makes all the difference for training in the wet.", products: [ { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }, { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "rain-jacket-women.webp" }, { name: "Pack Covers", link: "https://www.rei.com/c/pack-covers", image: "pack-cover.webp" } ]},
+            cold: { text: "It's chilly! Layering up is the best way to stay warm on your adventures.", products: [ { name: "Men's Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer.webp" }, { name: "Women's Base Layers", link: "https://www.rei.com/c/womens-base-layer-tops", image: "base-layer-women.webp" }, { name: "Warm Hats", link: "https://www.rei.com/c/winter-hats", image: "hat.webp" } ]},
+            snow: { text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", products: [ { name: "Men's Winter Boots", link: "https://www.rei.com/c/mens-winter-boots", image: "winter-boots.webp" }, { name: "Women's Winter Boots", link: "https://www.rei.com/c/womens-winter-boots", image: "winter-boots-women.webp" }, { name: "Gaiters", link: "https://www.rei.com/c/gaiters", image: "gaiters.webp" } ]},
+            clear: { text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", products: [ { name: "Men's Sunglasses", link: "https://www.rei.com/c/mens-sunglasses", image: "sunglasses.webp" }, { name: "Women's Sunglasses", link: "https://www.rei.com/c/womens-sunglasses", image: "sunglasses-women.webp" }, { name: "Sunscreen", link: "https://www.rei.com/c/sunscreen", image: "sunscreen.webp" } ]},
+            default: { text: "Whatever the weather, having the right gear makes every adventure better. Explore the latest outdoor equipment.", products: [ { name: "Men's New Arrivals", link: "https://www.rei.com/c/mens-new-arrivals", image: "new-arrivals.webp" }, { name: "Women's New Arrivals", link: "https://www.rei.com/c/womens-new-arrivals", image: "new-arrivals-women.webp" }, { name: "Camp Kitchen", link: "https://www.rei.com/c/camp-kitchen", image: "camp-kitchen.webp" } ]}
         };
 
         const getWeatherData = async (lat, lon) => {
