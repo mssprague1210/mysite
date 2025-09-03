@@ -1,267 +1,509 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Matthew Sprague – Home</title>
-  <meta name="description" content="Digital platforms strategist focused on human-centered design and outdoor-inspired simplicity." />
-  <meta name="theme-color" content="#234F2E" />
-  <meta name="color-scheme" content="light dark" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/assets/site.css?v=13" />
+  <title>Curse of Strahd — Story So Far</title>
 
-  <!-- Perf: optional if you remove @import in CSS later -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+	
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.ico">
+
+
+  <style>
+    :root{
+      --bg0:#0a0a0a; --bg1:#111317; --panel:#0f1218; --muted:#a7adba; --text:#eceff4;
+      --accent:#b84a4a; --accent-2:#7cc4ff; --card:#0c0f15; --ring:rgba(184,74,74,.35); --border:#2a2e37;
+    }
+    html, body { height:100%; }
+    body{
+      margin:0; font-family:"Merriweather", ui-serif, Georgia, serif; color:var(--text);
+       background:
+    linear-gradient(
+      to bottom,
+      #53504D 0px,
+      #4A4846 125px,          /* gentle ramp toward the next stop */
+      #383633 250px,
+      #2E2C2B 375px,          /* mid tint to keep it smooth */
+      #1C1B1A 500px,
+      #121211 750px,          /* slow fade toward black */
+      #000000 1000px,
+      #000000 100%
+    ),
+
+    /* Layer 2–3: the moody radials (single instances, no tiling) */
+    radial-gradient(900px 700px at 20% -10%, #1a1d24 0%, transparent 60%),
+    radial-gradient(1000px 800px at 120% -30%, #19121e 0%, transparent 60%),
+
+    /* Fallback base */
+    #000;
+
+  /* Prevent any tiling on tall pages */
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+
+  /* Fixed sizes for the radials so they don’t reflow/retile */
+  background-size:
+    100% 100%,   /* the linear gradient covers the page */
+    900px 700px,
+    1000px 800px,
+    auto;
+
+  background-position:
+    top left,
+    20% -10%,
+    120% -30%,
+    center;
+
+  /* Keep content off the device bottom “chin” */
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+@media (max-width: 880px){
+  body{
+    background:
+      linear-gradient(
+        to bottom,
+        #53504D 0px,
+        #454340 120px,
+        #30302E 240px,
+        #1C1B1A 360px,
+        #000 720px,
+        #000 100%
+      ),
+      #000;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 100% 100%, auto;
+    background-position: top left, center;
+  }
+}
+
+    .shell{ display:grid; grid-template-columns:300px 1fr; gap:18px; max-width:1200px; margin:24px auto; padding:0 16px; }
+    header.topbar{
+      grid-column:1 / -1; display:flex; justify-content:space-between; align-items:center;
+      padding:12px 16px; border:1px solid var(--border); border-radius:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+      margin-bottom:8px;
+    }
+    .brand-title{ font-family:"Cinzel", serif; letter-spacing:.5px; margin:0; font-size:22px; }
+    .top-links a{ color:var(--text); text-decoration:none; margin-left:14px; }
+    .top-links a:hover{ color:var(--accent-2); }
+
+    .sidebar{
+      position:sticky; top:16px; height:calc(100dvh - 32px);
+      background:linear-gradient(180deg, #0f1218, #0b0e14);
+      border:1px solid var(--border); border-radius:14px; overflow:hidden;
+      /* keep sidebar off device bottom edge */
+      margin-bottom:16px;
+    }
+    .brand{ padding:12px 12px 10px; border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(184,74,74,.08), transparent 60%); }
+    .brand h2{ font:700 16px/1 "Cinzel", serif; margin:0 0 6px; }
+    .brand p{ margin:0; color:var(--muted); font-size:12px; }
+
+    /* Moved here: All-Chapter Gallery button (inverted) */
+	.brand .btn-invert{
+	width:100%; margin-top:8px;
+	padding:10px 12px; border-radius:10px; cursor:pointer;
+	background:#0b0e14; color:var(--text);
+	border:1px solid var(--border); font-weight:600;
+	}
+	.brand .btn-invert:hover{
+	border-color: rgba(184,74,74,.45);
+	box-shadow: 0 0 0 3px rgba(184,74,74,.20);
+	color:#fff;
+	}
+
+
+    .chap-wrap{ display:flex; flex-direction:column; height:calc(100% - 88px); }
+    .chapters{ list-style:none; margin:0; padding:10px; overflow:auto; }
+    .chapters li{ margin:6px 0; }
+    .chapters button{
+      width:100%; text-align:left; padding:10px 12px; background:transparent; color:var(--text);
+      border:1px solid var(--border); border-radius:10px; cursor:pointer; transition:.2s; font-family:"Merriweather", serif;
+    }
+    .chapters button:hover, .chapters button[aria-current="true"]{
+      background:rgba(184,74,74,.10); border-color:rgba(184,74,74,.4); box-shadow:0 0 0 3px var(--ring);
+    }
+    .pager{
+      display:flex; gap:8px; justify-content:space-between; padding:8px 10px 12px;
+      border-top:1px solid var(--border); background:rgba(0,0,0,.15);
+    }
+    .btn{ padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#0b0e14; color:var(--text); cursor:pointer; }
+    .pager button:disabled{ opacity:.4; cursor:not-allowed; }
+
+    .content{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%);
+      border:1px solid var(--border); border-radius:16px; padding:18px;
+      margin-bottom:24px; /* keep content off bottom */
+    }
+    .chapter-header{ display:flex; align-items:baseline; gap:10px; margin:6px 0 10px; }
+    .chapter-header h2{ margin:0; font:700 26px/1 "Cinzel", serif; letter-spacing:.4px; }
+    .chapter-header span{ color:var(--muted); font-size:13px; }
+
+    .chapter-text{
+      color:#e6e9f0; line-height:1.75; font-size:17px;
+      background:
+        radial-gradient(1200px 500px at 0% 0%, rgba(184,74,74,.06) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 70%);
+      border:1px solid #3a3f49; border-radius:14px; padding:16px 18px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.02), inset 0 12px 24px rgba(0,0,0,.35);
+    }
+    .chapter-text p{ margin:0 0 1rem; }
+
+    .meta{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:12px 0 0; }
+    .meta a{ color:var(--accent-2); text-decoration:none; font-size:13px; }
+    .meta a:hover{ text-decoration:underline; }
+
+    .toolbar{ display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-top:10px; }
+    .gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:14px; }
+    .card{ background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in; position:relative; }
+    .card img{ display:block; width:100%; height:170px; object-fit:cover; filter:saturate(1.02) contrast(1.05); transition:.2s transform; }
+    .card:hover img{ transform:scale(1.02); }
+    .cap{ font-size:12px; color:var(--muted); padding:8px 10px; display:block; }
+
+    .gallery-only .chapter-text, .gallery-only .chapter-header, .gallery-only .meta{ display:none; }
+    .gallery-only .gallery{ margin-top:0; }
+
+    /* All-chapter gallery */
+    .all-gallery{ display:none; }
+    .all-gallery.show{ display:block; }
+    .all-gallery h3{
+      font:700 20px/1 "Cinzel", serif; margin:18px 0 10px; letter-spacing:.3px;
+      border-bottom:1px solid var(--border); padding-bottom:6px;
+    }
+    .all-gallery .chapter-grid{
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+      gap:12px; margin-bottom:18px;
+    }
+    .all-gallery .thumb{ background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; cursor:zoom-in; }
+    .all-gallery .thumb img{ display:block; width:100%; height:170px; object-fit:cover; transition:transform .2s; filter:saturate(1.02) contrast(1.05); }
+    .all-gallery .thumb:hover img{ transform:scale(1.02); }
+
+    /* Lightbox */
+    .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:50; }
+    .lightbox.open{ display:flex; }
+    .lightbox img{ max-width:min(92vw,1600px); max-height:86vh; object-fit:contain; box-shadow:0 10px 40px rgba(0,0,0,.6); border-radius:10px; }
+    .lb-cap{ color:#dbe2ee; font-size:14px; margin-top:10px; text-align:center; max-width:92vw; }
+    .lb-close, .lb-prev, .lb-next{
+      position:fixed; top:12px; background:#0b0e14; border:1px solid var(--border); color:#fff;
+      backdrop-filter:blur(6px); padding:8px 12px; border-radius:10px; cursor:pointer;
+    }
+    .lb-close{ right:12px; }
+    .lb-prev, .lb-next{ top:50%; transform:translateY(-50%); }
+    .lb-prev{ left:12px; } .lb-next{ right:12px; }
+
+    @media (max-width:880px){
+      .shell{ grid-template-columns:1fr; }
+      .sidebar{ position:static; height:auto; }
+      .chapters{ max-height:40vh; }
+      .gallery{ display:none; } .gallery.show{ display:grid; }
+    }
+  </style>
 </head>
 <body>
-  <!-- Skip link for keyboard/screen-reader users -->
-  <a class="skip-link" href="#main">Skip to content</a>
-  <nav class="top-nav" aria-label="Primary">
-    <div class="container">
-      <a class="brand" href="/">
-        <img src="/favicon.png" alt="M.S. favicon" />
-        <span class="name">Matthew Sprague</span>
-      </a>
-
-      <div class="menu">
-        <a aria-current="page" class="active" href="/">Home</a>
-        <a href="/resume/">Resume</a>
-        <a href="/hobbies/">Hobbies</a>
-        <a href="/trips/">Trips</a>
-        <a href="/story/">DND Campaign</a>
-      </div>
-
-      <button
-        class="hamburger"
-        aria-label="Menu"
-        aria-controls="mobile-panel"
-        aria-expanded="false">
-        <span class="bars" aria-hidden="true"></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile nav is its own landmark and outside the sticky nav -->
-  <nav id="mobile-panel" class="mobile-panel" aria-label="Mobile navigation">
-    <a href="/">Home</a>
-    <a href="/resume/">Resume</a>
-    <a href="/hobbies/">Hobbies</a>
-    <a href="/trips/">Trips</a>
-    <a href="/story/">DND Campaign</a>
-  </nav>
-
-  <main id="main">
-    <!-- New Personal Intro Section -->
-    <header id="home" class="personal-intro container">
-        <div class="intro-text">
-            <div class="eyebrow">Product Marketing • Go-To-Market Strategy</div>
-            <h1>Hi, I’m Matthew.</h1>
-            <p>I’m a digital marketing leader with a passion for building data-driven strategies that connect with users. With a background in leading high-impact experimentation and personalization at Verizon, I specialize in transforming business goals into simple, human-centered digital experiences.</p>
-            <p>Below is a small tech demo I built to showcase this approach. Give it a try!</p>
-        </div>
-        <div class="intro-photo">
-            <!-- Your photo -->
-            <img src="/assets/images/matt.webp" alt="A photo of Matthew Sprague">
-        </div>
+  <div class="shell">
+    <header class="topbar">
+      <h1 class="brand-title">Curse of Strahd — Story So Far</h1>
+      <nav class="top-links"><a href="/">Home</a></nav>
     </header>
 
-    <!-- Weather Widget Section -->
-    <section id="gear-forecast" class="container">
-        <!-- Initial prompt, visible by default -->
-        <div id="widget-prompt" class="widget-prompt">
-            <h2>Gear Forecaster</h2>
-            <p>Check the weather where you are to get recommendations on great gear!</p>
-            <button id="forecast-button" class="button">Gear Forecast</button>
+    <aside class="sidebar" role="complementary">
+      <div class="brand">
+        <h2>Chapters</h2>
+        <p>Tap to open an entry • Paginated</p>
+        <button id="allGalleryBtn" class="btn-invert" aria-pressed="false">All-Chapter Gallery</button>
+      </div>
+
+      <div class="chap-wrap">
+        <ul class="chapters" id="chapterList" role="tablist" aria-label="Chapters"></ul>
+        <div class="pager">
+          <button id="prevPage" class="btn">◀ Prev</button>
+          <button id="nextPage" class="btn">Next ▶</button>
         </div>
+      </div>
+    </aside>
 
-        <!-- Weather card, hidden by default -->
-        <div id="widget-card" class="widget-card" style="display: none;">
-            <div id="weather-forecast-display" class="weather-forecast-display">
-                <div id="weather-icon"></div>
-                <div id="weather-details" class="weather-details">
-                    <p id="weather-location">Fetching your location...</p>
-                    <p id="weather-temp-desc"></p>
-                    <p id="weather-timestamp"></p>
-                </div>
-            </div>
-            <p id="recommendation-text">Finding the right gear for you...</p>
-            <div id="recommendation-products" class="recommendation-products">
-                <!-- Product items will be injected here by JS -->
-            </div>
-        </div>
-    </section>
+    <main class="content" role="main" id="mainContent">
+      <div class="chapter-header">
+        <h2 id="chapterTitle">Chapter Title</h2>
+        <span id="chapterMeta"></span>
+      </div>
 
-    <!-- "About This Feature" Section -->
-    <section class="about-feature container">
-        <h2>About This Feature</h2>
-        <p>This "Gear Forecaster" is a proof-of-concept for personalized e-commerce. It uses the OpenWeatherMap API via a secure serverless function to fetch a visitor's local weather. Based on the conditions, it dynamically suggests relevant product categories, demonstrating a practical way to increase user engagement and conversion.</p>
-        <p>It was designed as a fun example of how I approach digital strategy: blending data, user context, and business goals to create a valuable experience. If you like what you see, I'd love to discuss it further. Together, we can explore web and user engagement strategies for e-commerce.</p>
-        <div class="cta-row">
-          <a class="button" href="/resume/">View My Resume</a>
-        </div>
-    </section>
+      <div id="chapterText" class="chapter-text">Select a chapter on the left to begin.</div>
+      <div class="meta" id="albumLinks" aria-live="polite"></div>
 
-  </main>
+      <div class="toolbar">
+        <button id="toggleGallery" class="btn" aria-pressed="false">Gallery Mode</button>
+        <button id="toggleMobileGallery" class="btn" aria-pressed="false">Show Gallery (Mobile)</button>
+      </div>
 
-  <footer class="container">
-    <p>© <span id="year"></span> Matthew Sprague. Forest green & gold. Hosted on Cloudflare; Netlify deploys.</p>
-  </footer>
+      <section class="gallery" id="gallery" aria-label="Image gallery"></section>
+      <section id="allGallery" class="all-gallery" aria-label="All chapters image gallery"></section>
+    </main>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Image viewer">
+    <button class="lb-close" id="lbClose" aria-label="Close">Close ✕</button>
+    <button class="lb-prev" id="lbPrev" aria-label="Previous">◀</button>
+    <div>
+      <img id="lbImg" alt="Expanded image" />
+      <div class="lb-cap" id="lbCap"></div>
+    </div>
+    <button class="lb-next" id="lbNext" aria-label="Next">▶</button>
+  </div>
 
   <script>
-    // --- Standard Page Scripts ---
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    const btn = document.querySelector('.hamburger');
-    const panel = document.getElementById('mobile-panel');
-    const focusableElements = panel ? panel.querySelectorAll('a') : [];
-    const firstLink = focusableElements[0];
-    const lastLink = focusableElements[focusableElements.length - 1];
-
-    function openMenu() {
-      btn.setAttribute('aria-expanded', 'true');
-      document.body.classList.add('mobile-open');
-      panel.addEventListener('keydown', trapFocus);
-      firstLink && firstLink.focus();
-    }
-    function closeMenu() {
-      btn.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('mobile-open');
-      panel.removeEventListener('keydown', trapFocus);
-      btn.focus();
-    }
-    function trapFocus(e) {
-      if (e.key === 'Tab') {
-        if (e.shiftKey && document.activeElement === firstLink) {
-          e.preventDefault();
-          lastLink.focus();
-        } else if (!e.shiftKey && document.activeElement === lastLink) {
-          e.preventDefault();
-          firstLink.focus();
-        }
-      }
-    }
-    if (btn && panel) {
-      btn.addEventListener('click', () => {
-        const open = btn.getAttribute('aria-expanded') === 'true';
-        open ? closeMenu() : openMenu();
-      });
-      panel.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A') closeMenu();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
-          closeMenu();
-        }
-      });
-    }
-
-    // --- Weather Widget Script ---
-    const forecastButton = document.getElementById('forecast-button');
-    const widgetPrompt = document.getElementById('widget-prompt');
-    const widgetCard = document.getElementById('widget-card');
-
-    const weatherWidget = () => {
-        const weatherIconEl = document.getElementById('weather-icon');
-        const locationEl = document.getElementById('weather-location');
-        const tempDescEl = document.getElementById('weather-temp-desc');
-        const timestampEl = document.getElementById('weather-timestamp');
-        const recommendationTextEl = document.getElementById('recommendation-text');
-        const recommendationProductsEl = document.getElementById('recommendation-products');
-
-        const recommendations = {
-            hot: { text: "Wow! It's hot out there. If you're running or cycling today, staying hydrated is key.", products: [ { name: "Hydration Vests", link: "https://www.camelbak.com/shop/", image: "2654001000.webp" }, { name: "Water Bottles", link: "https://www.hydroflask.com/shop/travel-tumbler", image: "hydroflask.webp" }, { name: "Electrolytes", link: "https://dripdrop.com/collections/all", image: "dripdrop.webp" } ]},
-            rain: { text: "Sometimes training comes with the risk of rain. Always prioritize safety and be prepared with a rain jacket or a dry bag.", products: [ { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }, { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "womensrainjacket.webp" }, { name: "Dry Bags", link: "https://www.rei.com/c/dry-bags", image: "drybag.webp" } ]},
-            cold: { text: "It's chilly! Layering up is the best way to stay warm on your adventures.", products: [ { name: "Men's Base Layers", link: "https://www.rei.com/c/mens-base-layer-tops", image: "base-layer-men.webp" }, { name: "Women's Base Layers", link: "https://www.rei.com/c/womens-base-layer-tops", image: "base-layer-women.webp" }, { name: "Warm Hats", link: "https://www.rei.com/c/winter-hats", image: "winter-hat.webp" } ]},
-            snow: { text: "Looks like snow! Perfect weather for some warm, waterproof boots to keep your feet happy.", products: [ { name: "Men's Winter Boots", link: "https://www.danner.com/styles/boots?sortId=position-asc&gender%5B%5D=5338&stock_status%5B%5D=1&stock_status%5B%5D=0", image: "winter-boots-men.webp" }, { name: "Women's Winter Boots", link: "https://www.danner.com/women/hike?sortId=position-asc&stock_status%5B%5D=1&stock_status%5B%5D=0", image: "winter-boots-women.webp" }, { name: "Gaiters", link: "https://www.rei.com/c/leg-gaiters", image: "gaiters.webp" } ]},
-            clear: { text: "It's a beautiful clear day! Perfect for getting outside. Protect your eyes with a quality pair of sunglasses.", products: [ { name: "Men's Sunglasses", link: "https://www.mauijim.com/US/en_US/shop/sunglasses/men", image: "mauijimmen.webp" }, { name: "Women's Sunglasses", link: "https://www.mauijim.com/US/en_US/shop/sunglasses/women", image: "mauijimwomen.webp" }, { name: "Sunscreen", link: "https://www.sunbum.com/products/daily-50-body-lotion", image: "sunbum.webp" } ]},
-            mild: { text: "It looks like ideal camping, running, or biking weather! Check out these great deals.", products: [ { name: "Running Shoes", link: "https://www.saucony.com/en/running/", image: "running-shoes.webp" }, { name: "Tents", link: "https://www.coleman.com/camp-sports/tents-by-size/", image: "tent.webp" }, { name: "Day Packs", link: "https://www.osprey.com/backpacks-bags/day-packs", image: "day-pack.webp" } ]},
-            overcast: { text: "It's not raining yet, but now is the perfect time to prepare.", products: [ { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }, { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "womensrainjacket.webp" }, {  name: "Dry Bags", link: "https://www.rei.com/c/dry-bags", image: "drybag.webp" } ]},
-            misty: { text: "It's a little wet out there, but hopefully it clears up soon. Stay safe and dry with these great picks.", products: [ { name: "Men's Rain Jackets", link: "https://www.outdoorresearch.com/collections/mens-rain-jackets", image: "rainjacket.webp" }, { name: "Women's Rain Jackets", link: "https://www.outdoorresearch.com/collections/womens-rain-jackets", image: "womensrainjacket.webp" }, {  name: "Dry Bags", link: "https://www.rei.com/c/dry-bags", image: "drybag.webp" } ]},
-            default: { text: "Whatever the weather, having the right gear makes every adventure better. Explore and get inspired to try something new.", products: [ { name: "Mountaineering Gear", link: "https://www.rei.com/c/mountaineering-gear", image: "new-arrivals.webp" }, { name: "Swimming Gear", link: "https://www.arenasport.com/en_us/", image: "new-arrivals-women.webp" }, { name: "The Smartest Watches", link: "https://www.garmin.com/", image: "garmin.webp" } ]}
-        };
-
-        const getWeatherData = async (lat, lon) => {
-            try {
-                const response = await fetch(`/.netlify/functions/weather?lat=${lat}&lon=${lon}`);
-                if (!response.ok) throw new Error('Weather data not available.');
-                const data = await response.json();
-                updateWidget(data);
-            } catch (error) {
-                locationEl.textContent = 'Could not fetch weather.';
-                console.error(error);
-            }
-        };
-
-        const updateWidget = (data) => {
-            const temp = Math.round(data.main.temp);
-            const description = data.weather[0].description;
-            const iconCode = data.weather[0].icon;
-            const weatherId = data.weather[0].id; // The numeric ID for the weather condition
-            const timestamp = new Date(data.dt * 1000);
-            const hour = timestamp.getHours();
-            const formattedTime = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            if (hour >= 6 && hour < 18) {
-                weatherIconEl.classList.add('is-day');
-                weatherIconEl.classList.remove('is-night');
-            } else {
-                weatherIconEl.classList.add('is-night');
-                weatherIconEl.classList.remove('is-day');
-            }
-
-            locationEl.textContent = `Your forecast in ${data.name}`;
-            tempDescEl.textContent = `${temp}°F, ${description}`;
-            timestampEl.textContent = `Updated at ${formattedTime}`;
-            weatherIconEl.innerHTML = `<img src="https://openweathermap.org/img/wn/${iconCode}@2x.png" alt="${description}">`;
-
-            let recommendation;
-            if (temp >= 80) recommendation = recommendations.hot;
-            else if (temp <= 49) recommendation = recommendations.cold;
-            else if (weatherId >= 200 && weatherId < 600) recommendation = recommendations.rain; // Rain, Drizzle, Thunderstorm
-            else if (weatherId >= 600 && weatherId < 700) recommendation = recommendations.snow; // Snow
-            else if (weatherId === 804) recommendation = recommendations.overcast; // Overcast clouds
-            else if (weatherId >= 701 && weatherId <= 781) recommendation = recommendations.misty; // Mist, Haze, Fog, etc.
-            else if (temp >= 50 && temp <= 79) recommendation = recommendations.mild; // Catches clear, few/scattered clouds in this temp range
-            else recommendation = recommendations.default; // Fallback for any other case
-            
-            recommendationTextEl.textContent = recommendation.text;
-            
-            recommendationProductsEl.innerHTML = recommendation.products.map(product => `
-                <div class="product-item">
-                    <img src="/gearforecast/${product.image}" alt="${product.name}" width="120" height="120">
-                    <a href="${product.link}" class="button" target="_blank" rel="noopener noreferrer">${product.name}</a>
-                </div>
-            `).join('');
-        };
-
-        const getLocation = () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => { getWeatherData(position.coords.latitude, position.coords.longitude); },
-                    (error) => {
-                        locationEl.textContent = 'Location access denied.';
-                        recommendationTextEl.textContent = 'Please enable location services to get a gear forecast.';
-                        console.error(error);
-                    }
-                );
-            } else {
-                locationEl.textContent = 'Geolocation is not supported.';
-                recommendationTextEl.textContent = 'Sorry, your browser does not support the features needed for a forecast.';
-            }
-        };
-
-        getLocation();
+    /* ---------- CONTENT ---------- */
+    const STORY = {
+      title: "Curse of Strahd — The Story So Far",
+      chapters: [
+        { id: "intro", title: "Introduction", date: "2025-07-17", file: "chapters/intro.html" },
+		{ id: "characters", title: "Characters", date: "2025-07-17", file: "chapters/characters.html" },
+        { id: "arrival", title: "Arrival in Barovia", date: "2025-01-17", file: "chapters/arrival.html" },
+        { id: "village", title: "The Village and the Doll", date: "2025-02-02", file: "chapters/village.html" },
+		{ id: "ireena", title: "Ireena and Doru", date: "2025-02-02", file: "chapters/ireena.html" }
+		{ id: "burial", title: "The Burial and the Merchant", date: "2025-02-02", file: "chapters/burial.html" }
+      ]
     };
 
-    forecastButton.addEventListener('click', () => {
-        widgetPrompt.style.display = 'none';
-        widgetCard.style.display = 'flex';
-        weatherWidget();
+    // Master list of all image files
+    const ALL_IMAGE_FILES = [
+      "characters--hoberm.webp",
+      "characters--ket.webp",
+      "characters--rick.webp",
+      "characters--gadwick.webp",
+		"arrival--the-team-leaves-for-barovia.webp",
+		"arrival--rick-investigating-near-campsite.webp",
+		"arrival--the-team-encounters-wolves.webp",
+		"arrival--ket-revives-gadwick.webp",
+		"arrival--gadwicks-smelly-cheese.webp",
+		"ireena--ireena-stands-in-the-doorway.webp",
+		"ireena--gadwick-blasts-a-bat.webp",
+		"ireena--the-ghosts-rise.webp",
+		"ireena--the-party-carries-the-casket-to-the-church.webp",
+		"ireena--rick-puts-an-end-to-doru.webp",
+		"village--morgathas-dream-pies.webp",
+		"village--hoberm-offers-a-possum-to-mary.webp",
+      // Add new image filenames here in the format: "chapter-id--description.webp"
+    ];
+
+    /* ---------- SETTINGS ---------- */
+    const MOBILE_MEDIA = window.matchMedia('(max-width: 880px)');
+    const MOBILE_PER_PAGE = 5;
+    const DESKTOP_PER_PAGE = 10;
+    let CHAPTERS_PER_PAGE = MOBILE_MEDIA.matches ? MOBILE_PER_PAGE : DESKTOP_PER_PAGE;
+
+    /* ---------- STATE / DOM ---------- */
+    const chapterList = document.getElementById('chapterList');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const chapterTitle = document.getElementById('chapterTitle');
+    const chapterMeta = document.getElementById('chapterMeta');
+    const chapterText = document.getElementById('chapterText');
+    const gallery = document.getElementById('gallery');
+    const albumLinks = document.getElementById('albumLinks');
+    const mainContent = document.getElementById('mainContent');
+    const toggleGallery = document.getElementById('toggleGallery');
+    const toggleMobileGallery = document.getElementById('toggleMobileGallery');
+    const allGalleryBtn = document.getElementById('allGalleryBtn');
+    const allGallerySec = document.getElementById('allGallery');
+    let currentPage = 0;
+
+    function renderChapterList() {
+      const start = currentPage * CHAPTERS_PER_PAGE;
+      const end = Math.min(start + CHAPTERS_PER_PAGE, STORY.chapters.length);
+      chapterList.innerHTML = '';
+      STORY.chapters.slice(start, end).forEach((c, i) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.textContent = c.title;
+        btn.setAttribute('role', 'tab');
+        btn.setAttribute('aria-controls', `panel-${c.id}`);
+        btn.addEventListener('click', () => { showAllGallery(false); loadChapter(start + i); });
+        li.appendChild(btn);
+        chapterList.appendChild(li);
+      });
+      prevPageBtn.disabled = currentPage === 0;
+      nextPageBtn.disabled = end >= STORY.chapters.length;
+    }
+
+    prevPageBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; renderChapterList(); } });
+    nextPageBtn.addEventListener('click', () => {
+      const maxPage = Math.floor((STORY.chapters.length - 1) / CHAPTERS_PER_PAGE);
+      if (currentPage < maxPage) { currentPage++; renderChapterList(); }
     });
 
+    MOBILE_MEDIA.addEventListener('change', () => {
+      CHAPTERS_PER_PAGE = MOBILE_MEDIA.matches ? MOBILE_PER_PAGE : DESKTOP_PER_PAGE;
+      const activeId = location.hash.replace('#', '');
+      const idx = STORY.chapters.findIndex(c => c.id === activeId);
+      currentPage = idx >= 0 ? Math.floor(idx / CHAPTERS_PER_PAGE) : 0;
+      renderChapterList();
+      if (idx >= 0) loadChapter(idx);
+    });
+
+    // Helper function to turn "gadwick-is-sad" into "Gadwick is sad"
+    function formatFilenameAsCaption(filename) {
+      const caption = filename.replace(/-/g, ' ');
+      return caption.charAt(0).toUpperCase() + caption.slice(1);
+    }
+
+    async function loadChapter(index) {
+      const c = STORY.chapters[index];
+      const start = currentPage * CHAPTERS_PER_PAGE;
+      [...chapterList.querySelectorAll('button')].forEach((b, i) => {
+        b.setAttribute('aria-current', start + i === index ? 'true' : 'false');
+      });
+      chapterTitle.textContent = c.title;
+      chapterMeta.textContent = c.date ? new Date(c.date).toLocaleDateString() : '';
+      chapterText.innerHTML = '<p>Loading...</p>';
+      try {
+        const response = await fetch(c.file);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const htmlContent = await response.text();
+        chapterText.innerHTML = htmlContent;
+      } catch (error) {
+        console.error("Could not fetch chapter content:", error);
+        chapterText.innerHTML = `<p style="color:var(--accent);">Error: Could not load chapter content.</p>`;
+      }
+      albumLinks.innerHTML = '';
+      gallery.innerHTML = '';
+      const chapterImageFiles = ALL_IMAGE_FILES.filter(file => file.startsWith(c.id + '--'));
+      const chapterImages = chapterImageFiles.map(filename => {
+        const namePart = filename.split('--')[1].split('.')[0];
+        const caption = formatFilenameAsCaption(namePart);
+        return { src: `images/${filename}`, alt: caption, cap: caption };
+      });
+      chapterImages.forEach((img, i) => {
+        const card = document.createElement('figure');
+        card.className = 'card';
+        const im = document.createElement('img');
+        im.loading = 'lazy';
+        im.src = img.src;
+        im.alt = img.alt;
+        im.addEventListener('click', () => openLightbox(chapterImages, i));
+        const cap = document.createElement('figcaption');
+        cap.className = 'cap';
+        cap.textContent = img.cap;
+        card.appendChild(im);
+        card.appendChild(cap);
+        gallery.appendChild(card);
+      });
+      history.replaceState(null, '', `#${c.id}`);
+    }
+
+    toggleGallery.addEventListener('click', () => {
+      showAllGallery(false);
+      const on = !mainContent.classList.contains('gallery-only');
+      mainContent.classList.toggle('gallery-only', on);
+      toggleGallery.setAttribute('aria-pressed', String(on));
+      toggleGallery.textContent = on ? 'Story Mode' : 'Gallery Mode';
+    });
+
+    toggleMobileGallery.addEventListener('click', () => {
+      const shown = gallery.classList.toggle('show');
+      toggleMobileGallery.setAttribute('aria-pressed', String(shown));
+      toggleMobileGallery.textContent = shown ? 'Hide Gallery (Mobile)' : 'Show Gallery (Mobile)';
+    });
+
+    function buildAllGallery() {
+      allGallerySec.innerHTML = '';
+      STORY.chapters.forEach((chapter) => {
+        const chapterImageFiles = ALL_IMAGE_FILES.filter(file => file.startsWith(chapter.id + '--'));
+        if (chapterImageFiles.length === 0) return;
+
+        const h = document.createElement('h3');
+        h.textContent = chapter.title;
+        allGallerySec.appendChild(h);
+
+        const grid = document.createElement('div');
+        grid.className = 'chapter-grid';
+        
+        const chapterImages = chapterImageFiles.map(filename => {
+            const namePart = filename.split('--')[1].split('.')[0];
+            const caption = formatFilenameAsCaption(namePart);
+            return { src: `images/${filename}`, alt: caption, cap: caption };
+        });
+
+        chapterImages.forEach((img, i) => {
+          const fig = document.createElement('figure');
+          fig.className = 'thumb';
+          const im = document.createElement('img');
+          im.loading = 'lazy';
+          im.src = img.src;
+          im.alt = img.alt;
+          im.addEventListener('click', () => openLightbox(chapterImages, i));
+          fig.appendChild(im);
+          grid.appendChild(fig);
+        });
+        allGallerySec.appendChild(grid);
+      });
+    }
+
+    function showAllGallery(on) {
+      const pressed = allGalleryBtn.getAttribute('aria-pressed') === 'true';
+      const wantOn = (typeof on === 'boolean') ? on : !pressed;
+      allGalleryBtn.setAttribute('aria-pressed', String(wantOn));
+      allGalleryBtn.textContent = wantOn ? 'Back to Story' : 'All-Chapter Gallery';
+      const storyBits = [document.querySelector('.chapter-header'), chapterText, albumLinks, document.querySelector('.toolbar'), gallery];
+      storyBits.forEach(el => { if (el) el.style.display = wantOn ? 'none' : ''; });
+      if (wantOn) {
+        if (mainContent.classList.contains('gallery-only')) {
+          mainContent.classList.remove('gallery-only');
+          toggleGallery.setAttribute('aria-pressed', 'false');
+          toggleGallery.textContent = 'Gallery Mode';
+        }
+        buildAllGallery();
+        allGallerySec.classList.add('show');
+        mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        allGallerySec.classList.remove('show');
+      }
+    }
+    allGalleryBtn.addEventListener('click', () => showAllGallery());
+
+    /* Lightbox */
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCap = document.getElementById('lbCap');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    let lbSet = [];
+    let lbIndex = 0;
+    function openLightbox(set, i) { lbSet = set; lbIndex = i; updateLB(); lb.classList.add('open'); }
+    function updateLB() { const it = lbSet[lbIndex]; lbImg.src = it.src; lbCap.textContent = it.cap || it.alt || ''; }
+    function closeLB() { lb.classList.remove('open'); }
+    function prevLB() { lbIndex = (lbIndex - 1 + lbSet.length) % lbSet.length; updateLB(); }
+    function nextLB() { lbIndex = (lbIndex + 1) % lbSet.length; updateLB(); }
+    lbClose.addEventListener('click', closeLB);
+    lbPrev.addEventListener('click', prevLB);
+    lbNext.addEventListener('click', nextLB);
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
+    window.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLB();
+      if (e.key === 'ArrowLeft') prevLB();
+      if (e.key === 'ArrowRight') nextLB();
+    });
+
+    /* Init */
+    function init() {
+      document.title = STORY.title || document.title;
+      renderChapterList();
+      const id = location.hash.replace('#', '');
+      const idx = STORY.chapters.findIndex(c => c.id === id);
+      if (idx >= 0) {
+        currentPage = Math.floor(idx / CHAPTERS_PER_PAGE);
+        renderChapterList();
+        loadChapter(idx);
+      } else {
+        loadChapter(0);
+      }
+    }
+    init();
   </script>
 </body>
 </html>
